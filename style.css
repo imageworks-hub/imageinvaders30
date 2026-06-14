@@ -1,0 +1,133 @@
+body{
+    margin:0;
+    background:#000;
+    overflow:hidden;
+    touch-action:none;
+}
+
+canvas{
+    display:block;
+    width:100vw;
+    height:100vh;
+    background:#020514;
+}
+
+#ui{ 
+    position:fixed;
+    bottom:20px;
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+    z-index:10;
+}
+
+button{
+    width:80px;
+    height:80px;
+    border:none;
+    border-radius:50%;
+    font-size:30px;
+    background:rgba(255,255,255,.2);
+    color:white;
+}
+
+#saveMessage{
+
+    display:none;
+
+    position:fixed;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    z-index:300;
+
+    color:gold;
+
+    font-size:25px;
+
+    font-weight:bold;
+
+    text-shadow:
+        0 0 10px cyan,
+        0 0 20px cyan,
+        0 0 40px yellow;
+
+    animation:saveFlash 1s infinite alternate;
+
+}
+
+@keyframes saveFlash{
+
+    from{
+
+        transform:
+        translate(-50%,-50%)
+        scale(1);
+
+    }
+
+    to{
+
+        transform:
+        translate(-50%,-50%)
+        scale(1.2);
+
+    }
+
+}
+
+#titleScreen{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100vw;
+    height:100vh;
+
+    background:black;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:1000;
+
+}
+
+#titleImage{
+
+    width:100vw;
+    height:100vh;
+
+    object-fit:contain;
+
+}
+
+#startBtn{
+
+    position:absolute;
+
+    width:220px;
+    height:90px;
+
+    top:62%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    background:transparent;
+
+    border:none;
+
+    z-index:1001;
+
+    cursor:pointer;
+
+}

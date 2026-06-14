@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0,user-scalable=no">
+
+<title>image Invaders</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="titleScreen">
+
+    <img src="title.png" id="titleImage">
+
+    <button id="startBtn"></button>
+
+</div>
+
+<canvas id="game"></canvas>
+
+<button id="saveBtn">カード保存</button>
+
+<img id="cardImage"
+style="
+display:none;
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+max-width:90%;
+max-height:80%;
+z-index:200;
+">
+
+<div id="saveMessage">
+長押し保存
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
