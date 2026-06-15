@@ -131,3 +131,127 @@ button{
     cursor:pointer;
 
 }
+
+
+#shopBtn{
+
+    position:absolute;
+
+    top:74%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    color:gold;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    text-shadow:
+        0 0 5px gold,
+        0 0 10px orange;
+
+    cursor:pointer;
+
+    z-index:1001;
+
+}
+
+#shopScreen{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100vw;
+    height:100vh;
+
+    background:#020514;
+
+    z-index:2000;
+
+    color:white;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+#shopScreen h2{
+
+    font-size:50px;
+
+    margin-bottom:80px;
+
+    color:white;
+
+    text-shadow:
+
+        0 0 10px cyan,
+        0 0 20px cyan;
+
+}
+
+#shopScreen label{
+
+    font-size:28px;
+
+    margin-bottom:50px;
+
+    color:white;
+
+}
+
+#buyBtn{
+
+    width:240px;
+
+    height:90px;
+
+    border:none;
+
+    border-radius:20px;
+
+    background:#2b49ff;
+
+    color:white;
+
+    font-size:35px;
+
+    margin-bottom:30px;
+
+    border:3px solid cyan;
+
+    box-shadow:
+
+        0 0 15px cyan,
+        0 0 30px blue;
+
+}
+
+#backBtn{
+
+    width:240px;
+
+    height:90px;
+
+    border:none;
+
+    border-radius:20px;
+
+    background:#222;
+
+    color:white;
+
+    font-size:35px;
+
+    border:3px solid white;
+
+}

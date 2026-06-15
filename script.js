@@ -169,6 +169,16 @@ let obtainedCard = null;
 let showSaveMessage = true;
 let saveMessageScale = 0;
 
+let barrierCount = 0;
+
+if(localStorage.getItem("barrier")){
+
+    barrierCount =
+    Number(
+        localStorage.getItem("barrier")
+    );
+
+}
 
 /////////////////////////////////////////////////
 // 敵42体
@@ -324,7 +334,28 @@ enemyBullets.forEach(b=>{
         Math.abs(b.x-player.x)<20 &&
         Math.abs(b.y-player.y)<20
     ){
-        lives--;
+        if(barrierCount > 0){
+
+    barrierCount--;
+
+    localStorage.setItem(
+        "barrier",
+        barrierCount
+    );
+
+    if(barrierCount <= 0){
+
+        localStorage.removeItem(
+            "barrier"
+        );
+
+    }
+
+}else{
+
+    lives--;
+
+}
         b.y=9999;
     }
 
@@ -507,7 +538,28 @@ bossBullets.forEach(b=>{
         Math.abs(b.x-player.x)<20 &&
         Math.abs(b.y-player.y)<20
     ){
-        lives--;
+        if(barrierCount > 0){
+
+    barrierCount--;
+
+    localStorage.setItem(
+        "barrier",
+        barrierCount
+    );
+
+    if(barrierCount <= 0){
+
+        localStorage.removeItem(
+            "barrier"
+        );
+
+    }
+
+}else{
+
+    lives--;
+
+}
         damageCooldown = 60;
 
         b.x = -9999;
@@ -654,11 +706,11 @@ if(
 
         enemyImage,
 
-        e.x-30,
-        e.y-30,
+        e.x-35,
+        e.y-35,
 
-        60,
-        60
+        70,
+        70
 
     );
 
@@ -674,13 +726,40 @@ if(
 
         playerImage,
 
-        player.x - 70,
-        player.y - 70,
+        player.x - 80,
+        player.y - 80,
 
-        140,
-        140
+        160,
+        160
 
     );
+
+}
+
+// プレイヤーの周りにバリア表示
+if(barrierCount > 0){
+
+    ctx.strokeStyle = "cyan";
+
+    ctx.shadowColor = "cyan";
+
+    ctx.shadowBlur = 20;
+
+    ctx.lineWidth = 5;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        player.x,
+        player.y,
+        90,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
 
 }
 
@@ -886,5 +965,38 @@ startBtn.onclick = function(){
     gameStarted = true;
 
     titleScreen.style.display = "none";
+
+    barrierCount =
+    Number(
+        localStorage.getItem("barrier")
+    ) || 0;
+
+};
+
+const shopBtn =
+document.getElementById("shopBtn");
+
+const shopScreen =
+document.getElementById("shopScreen");
+
+shopBtn.onclick = function(){
+
+    shopScreen.style.display = "flex";
+
+};
+
+backBtn.onclick = function(){
+
+    shopScreen.style.display = "none";
+
+};
+
+const buyBtn =
+document.getElementById("buyBtn");
+
+buyBtn.onclick = function(){
+
+    location.href =
+    "https://buy.stripe.com/test_7sY6oA3Gh6SK3pA1IwbII00";
 
 };
