@@ -1,10 +1,9 @@
 // バリア3回を保存
-localStorage.setItem(
-"barrier",
-"3"
-);
-
-// タイトル画面へ戻る
-location.href = "index.html";
-
 localStorage.setItem("barrier","3");
+
+// 3秒後にタイトルへ戻る
+setTimeout(function(){
+
+    location.href = "./index.html";
+
+},3000);

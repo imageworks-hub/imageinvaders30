@@ -127,17 +127,13 @@ button{
     border:none;
 
     z-index:1001;
-
-    cursor:pointer;
-
 }
-
 
 #shopBtn{
 
     position:absolute;
 
-    top:74%;
+    top:56%;
     left:50%;
 
     transform:translateX(-50%);
@@ -155,6 +151,19 @@ button{
     cursor:pointer;
 
     z-index:1001;
+
+}
+
+/* スマホ */
+@media (max-width:768px){
+
+    #shopBtn{
+
+        transform:translate(-50%,100px);
+
+        font-size:16px;
+
+    }
 
 }
 
@@ -201,11 +210,22 @@ button{
 
 #shopScreen label{
 
+    display:block;
+
+    width:100%;
+
+    text-align:center;
+
     font-size:28px;
 
-    margin-bottom:50px;
-
     color:white;
+
+    text-shadow:
+
+        0 0 10px cyan,
+        0 0 20px cyan;
+
+    margin-bottom:50px;
 
 }
 
@@ -253,5 +273,82 @@ button{
     font-size:35px;
 
     border:3px solid white;
+
+}
+
+/* スマホ用 */
+@media (max-width:768px){
+
+    #shopScreen h2{
+
+        font-size:24px;
+
+        margin-bottom:50px;
+
+    }
+
+    #shopScreen label{
+
+        width:90%;
+
+        font-size:16px;
+
+        line-height:1.8;
+
+        margin-bottom:40px;
+
+    }
+
+    #buyBtn{
+
+        width:70vw;
+
+        height:80px;
+
+        font-size:28px;
+
+    }
+
+    #backBtn{
+
+        width:70vw;
+
+        height:80px;
+
+        font-size:28px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    #shopScreen{
+
+        justify-content:flex-start;
+
+        padding-top:80px;
+
+    }
+
+}
+
+#shopScreen input[type="radio"]{
+
+    display:none;
+
+}
+
+h1{
+
+    color:gold;
+
+    font-size:70px;
+
+    text-shadow:
+
+        0 0 10px gold,
+        0 0 20px orange,
+        0 0 40px yellow;
 
 }

@@ -737,24 +737,63 @@ if(
 }
 
 // プレイヤーの周りにバリア表示
+// フェザーシールド
 if(barrierCount > 0){
 
-    ctx.strokeStyle = "cyan";
+    ctx.strokeStyle = "#66e0ff";
+    ctx.shadowColor = "#66e0ff";
+    ctx.shadowBlur = 25;
+    ctx.lineWidth = 6;
 
-    ctx.shadowColor = "cyan";
+    // 左の羽
+    ctx.beginPath();
 
-    ctx.shadowBlur = 20;
+    ctx.arc(
+        player.x - 35,
+        player.y,
+        75,
+        Math.PI * 0.7,
+        Math.PI * 1.3
+    );
 
-    ctx.lineWidth = 5;
+    ctx.stroke();
+
+    // 右の羽
+    ctx.beginPath();
+
+    ctx.arc(
+        player.x + 35,
+        player.y,
+        75,
+        Math.PI * 1.7,
+        Math.PI * 0.3
+    );
+
+    ctx.stroke();
+
+    // 内側の光
+    ctx.lineWidth = 3;
 
     ctx.beginPath();
 
     ctx.arc(
-        player.x,
+        player.x - 25,
         player.y,
-        90,
-        0,
-        Math.PI * 2
+        55,
+        Math.PI * 0.75,
+        Math.PI * 1.25
+    );
+
+    ctx.stroke();
+
+    ctx.beginPath();
+
+    ctx.arc(
+        player.x + 25,
+        player.y,
+        55,
+        Math.PI * 1.75,
+        Math.PI * 0.25
     );
 
     ctx.stroke();
