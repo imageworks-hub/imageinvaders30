@@ -742,24 +742,24 @@ if(barrierCount > 0){
 
     // 発光
     ctx.shadowColor = "#66ccff";
-    ctx.shadowBlur = 30;
+    ctx.shadowBlur = 20;
 
     // ドーム内部
     ctx.beginPath();
 
     ctx.arc(
-    player.x,
-    player.y,
-    110,
-    0,
-    Math.PI * 2
-);
+        player.x,
+        player.y,
+        55,
+        0,
+        Math.PI * 2
+    );
 
-    ctx.fillStyle = "rgba(80,170,255,0.45)";
+    ctx.fillStyle = "rgba(80,170,255,0.15)";
     ctx.fill();
 
     // 外側の輪
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 3;
     ctx.strokeStyle = "#99ddff";
     ctx.stroke();
 
