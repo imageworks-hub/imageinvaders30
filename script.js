@@ -727,7 +727,7 @@ if(
         playerImage,
 
         player.x - 80,
-        player.y - 120,
+        player.y - 40,
 
         160,
         160
