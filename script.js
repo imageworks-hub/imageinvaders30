@@ -737,65 +737,30 @@ if(
 }
 
 // プレイヤーの周りにバリア表示
-// フェザーシールド
+// エネルギードーム
 if(barrierCount > 0){
 
-    ctx.strokeStyle = "#66e0ff";
-    ctx.shadowColor = "#66e0ff";
-    ctx.shadowBlur = 25;
-    ctx.lineWidth = 6;
+    // 発光
+    ctx.shadowColor = "#66ccff";
+    ctx.shadowBlur = 30;
 
-    // 左の羽
+    // ドーム内部
     ctx.beginPath();
 
     ctx.arc(
-        player.x - 35,
-        player.y,
-        75,
-        Math.PI * 0.7,
-        Math.PI * 1.3
-    );
+    player.x,
+    player.y,
+    110,
+    0,
+    Math.PI * 2
+);
 
-    ctx.stroke();
+    ctx.fillStyle = "rgba(80,170,255,0.45)";
+    ctx.fill();
 
-    // 右の羽
-    ctx.beginPath();
-
-    ctx.arc(
-        player.x + 35,
-        player.y,
-        75,
-        Math.PI * 1.7,
-        Math.PI * 0.3
-    );
-
-    ctx.stroke();
-
-    // 内側の光
-    ctx.lineWidth = 3;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        player.x - 25,
-        player.y,
-        55,
-        Math.PI * 0.75,
-        Math.PI * 1.25
-    );
-
-    ctx.stroke();
-
-    ctx.beginPath();
-
-    ctx.arc(
-        player.x + 25,
-        player.y,
-        55,
-        Math.PI * 1.75,
-        Math.PI * 0.25
-    );
-
+    // 外側の輪
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = "#99ddff";
     ctx.stroke();
 
     ctx.shadowBlur = 0;
