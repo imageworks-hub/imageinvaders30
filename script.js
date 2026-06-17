@@ -59,6 +59,9 @@ const player = {
     size:60
 };
 
+let targetX = player.x;
+let targetY = player.y;
+
 let moveLeft = false;
 let moveRight = false;
 let moveUp = false;
@@ -232,8 +235,8 @@ canvas.addEventListener("touchmove",(e)=>{
 
     e.preventDefault();
 
-    player.x = e.touches[0].clientX;
-    player.y = e.touches[0].clientY;
+    targetX = e.touches[0].clientX;
+    targetY = e.touches[0].clientY;
 
 });
 
@@ -299,6 +302,9 @@ if(moveUp){
 if(moveDown){
     player.y += player.speed;
 }
+
+player.x += (targetX - player.x) * 0.3;
+player.y += (targetY - player.y) * 0.3;
 
 if(player.x < 20){
     player.x = 20;
