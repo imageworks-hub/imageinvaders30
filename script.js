@@ -303,6 +303,11 @@ if(moveDown){
     player.y += player.speed;
 }
 
+if(moveLeft || moveRight || moveUp || moveDown){
+    targetX = player.x;
+    targetY = player.y;
+}
+
 player.x += (targetX - player.x) * 0.3;
 player.y += (targetY - player.y) * 0.3;
 
@@ -708,17 +713,29 @@ if(
 
     if(!e.alive)return;
 
-    ctx.drawImage(
+    ctx.save();
 
-        enemyImage,
+// 白く発光
+ctx.shadowColor = "white";
+ctx.shadowBlur = 18;
 
-        e.x-35,
-        e.y-35,
+// 明るく・白っぽくする
+ctx.filter = "brightness(2.2) contrast(1.4) grayscale(1)";
 
-        70,
-        70
+// 敵画像
+ctx.drawImage(
+    enemyImage,
+    e.x - 35,
+    e.y - 35,
+    70,
+    70
+);
 
-    );
+ctx.restore();
+ctx.filter = "none";
+
+ctx.restore();
+ctx.filter = "none";
 
 });
 
@@ -916,6 +933,16 @@ loop();
 
 
 document.addEventListener("keydown", function(e){
+
+    if(
+        e.key === "ArrowLeft" ||
+        e.key === "ArrowRight" ||
+        e.key === "ArrowUp" ||
+        e.key === "ArrowDown" ||
+        e.code === "Space"
+    ){
+        e.preventDefault();
+    }
 
     if(e.key === "ArrowLeft") moveLeft = true;
     if(e.key === "ArrowRight") moveRight = true;
