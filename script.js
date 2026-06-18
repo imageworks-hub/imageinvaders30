@@ -23,6 +23,48 @@ const cardImage = document.getElementById("cardImage");
 
 const enemyImage = new Image();
 
+const enemyW = 60;
+const enemyH = 70;
+const enemyGlow = 8;
+
+const enemySprite = document.createElement("canvas");
+enemySprite.width = enemyW + enemyGlow * 2;
+enemySprite.height = enemyH + enemyGlow * 2;
+
+const enemySpriteCtx = enemySprite.getContext("2d");
+let enemySpriteReady = false;
+
+enemyImage.onload = function(){
+
+    enemySpriteCtx.imageSmoothingEnabled = false;
+
+    // 発光を一度だけ作る
+    enemySpriteCtx.shadowColor = "white";
+    enemySpriteCtx.shadowBlur = 6;
+
+    enemySpriteCtx.drawImage(
+        enemyImage,
+        enemyGlow,
+        enemyGlow,
+        enemyW,
+        enemyH
+    );
+
+    // 本体を重ねる
+    enemySpriteCtx.shadowBlur = 0;
+
+    enemySpriteCtx.drawImage(
+        enemyImage,
+        enemyGlow,
+        enemyGlow,
+        enemyW,
+        enemyH
+    );
+
+    enemySpriteReady = true;
+
+};
+
 enemyImage.src = "enemy.png";
 
 const bossImage = new Image();
@@ -709,33 +751,20 @@ if(
 }
 
     // 敵
-    enemies.forEach(e=>{
+    // 敵
+enemies.forEach(e=>{
 
     if(!e.alive)return;
 
-    ctx.save();
+    if(enemySpriteReady){
 
-// 白く発光
-ctx.shadowColor = "white";
-ctx.shadowBlur = 18;
+        ctx.drawImage(
+            enemySprite,
+            e.x - enemySprite.width / 2,
+            e.y - enemySprite.height / 2
+        );
 
-// 明るく・白っぽくする
-ctx.filter = "brightness(2.2) contrast(1.4) grayscale(1)";
-
-// 敵画像
-ctx.drawImage(
-    enemyImage,
-    e.x - 35,
-    e.y - 35,
-    70,
-    70
-);
-
-ctx.restore();
-ctx.filter = "none";
-
-ctx.restore();
-ctx.filter = "none";
+    }
 
 });
 
