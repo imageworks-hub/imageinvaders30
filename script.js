@@ -83,7 +83,7 @@ resize();
 
 window.addEventListener("resize", resize);
 
-function drawCoverImage(image){
+function drawContainImage(image){
 
     const imageRatio = image.width / image.height;
     const canvasRatio = canvas.width / canvas.height;
@@ -95,17 +95,17 @@ function drawCoverImage(image){
 
     if(canvasRatio > imageRatio){
 
-        drawWidth = canvas.width;
-        drawHeight = canvas.width / imageRatio;
-        drawX = 0;
-        drawY = (canvas.height - drawHeight) / 2;
-
-    }else{
-
         drawHeight = canvas.height;
         drawWidth = canvas.height * imageRatio;
         drawX = (canvas.width - drawWidth) / 2;
         drawY = 0;
+
+    }else{
+
+        drawWidth = canvas.width;
+        drawHeight = canvas.width / imageRatio;
+        drawX = 0;
+        drawY = (canvas.height - drawHeight) / 2;
 
     }
 
@@ -743,7 +743,7 @@ function draw(){
 
     if(clearFlag && clearBgImage.complete){
 
-    drawCoverImage(clearBgImage);
+    drawContainImage(clearBgImage);
 
 }
 
