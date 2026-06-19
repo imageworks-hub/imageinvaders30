@@ -528,11 +528,15 @@ bossDamageTimer = 10;
     obtainedCard =
 cards[Math.floor(Math.random()*cards.length)];
 
-saveBtn.style.display="block";
-document.getElementById("saveMessage").style.display = "block";
-
 cardImage.src = obtainedCard.image;
-cardImage.style.display = "block";
+
+setTimeout(function(){
+
+    saveBtn.style.display = "block";
+    document.getElementById("saveMessage").style.display = "block";
+    cardImage.style.display = "block";
+
+},1000);
 
     setTimeout(function(){
 
@@ -951,33 +955,7 @@ ctx.fillText(
 
 }
 
-if(clearFlag){
 
-    ctx.fillStyle="cyan";
-ctx.font="60px sans-serif";
-ctx.textAlign="center";
-
-ctx.fillText(
-    "CLEAR",
-    canvas.width/2,
-    canvas.height/2
-);
-
-if(obtainedCard){
-
-    ctx.font="30px sans-serif";
-
-    ctx.fillText(
-        obtainedCard.name + " GET!",
-        canvas.width/2,
-        canvas.height/2 + 80
-    );
-
-}
-
-
-
-}
 
 } 
 
