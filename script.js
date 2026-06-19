@@ -83,6 +83,42 @@ resize();
 
 window.addEventListener("resize", resize);
 
+function drawCoverImage(image){
+
+    const imageRatio = image.width / image.height;
+    const canvasRatio = canvas.width / canvas.height;
+
+    let drawWidth;
+    let drawHeight;
+    let drawX;
+    let drawY;
+
+    if(canvasRatio > imageRatio){
+
+        drawWidth = canvas.width;
+        drawHeight = canvas.width / imageRatio;
+        drawX = 0;
+        drawY = (canvas.height - drawHeight) / 2;
+
+    }else{
+
+        drawHeight = canvas.height;
+        drawWidth = canvas.height * imageRatio;
+        drawX = (canvas.width - drawWidth) / 2;
+        drawY = 0;
+
+    }
+
+    ctx.drawImage(
+        image,
+        drawX,
+        drawY,
+        drawWidth,
+        drawHeight
+    );
+
+}
+
 /////////////////////////////////////////////////
 // プレイヤー
 /////////////////////////////////////////////////
@@ -707,13 +743,7 @@ function draw(){
 
     if(clearFlag && clearBgImage.complete){
 
-    ctx.drawImage(
-        clearBgImage,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+    drawCoverImage(clearBgImage);
 
 }
 
