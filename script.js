@@ -25,7 +25,7 @@ const enemyImage = new Image();
 
 const enemyW = 60;
 const enemyH = 70;
-const enemyGlow = 8;
+const enemyGlow = 0;
 
 const enemySprite = document.createElement("canvas");
 enemySprite.width = enemyW + enemyGlow * 2;
@@ -38,9 +38,7 @@ enemyImage.onload = function(){
 
     enemySpriteCtx.imageSmoothingEnabled = false;
 
-    // 発光を一度だけ作る
-    enemySpriteCtx.shadowColor = "white";
-    enemySpriteCtx.shadowBlur = 6;
+    enemySpriteCtx.filter = "brightness(1.25) contrast(1.15)";
 
     enemySpriteCtx.drawImage(
         enemyImage,
@@ -50,16 +48,7 @@ enemyImage.onload = function(){
         enemyH
     );
 
-    // 本体を重ねる
-    enemySpriteCtx.shadowBlur = 0;
-
-    enemySpriteCtx.drawImage(
-        enemyImage,
-        enemyGlow,
-        enemyGlow,
-        enemyW,
-        enemyH
-    );
+    enemySpriteCtx.filter = "none";
 
     enemySpriteReady = true;
 
@@ -78,6 +67,10 @@ playerImage.src = "player.png";
 const backgroundImage = new Image();
 
 backgroundImage.src = "background.png";
+
+const clearBgImage = new Image();
+
+clearBgImage.src = "clear-bg.png";
 
 function resize(){
 
@@ -711,6 +704,18 @@ function draw(){
         );
 
     }
+
+    if(clearFlag && clearBgImage.complete){
+
+    ctx.drawImage(
+        clearBgImage,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+}
 
     // ボス…
 
