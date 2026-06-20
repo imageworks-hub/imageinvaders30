@@ -536,7 +536,7 @@ setTimeout(function(){
     document.getElementById("saveMessage").style.display = "block";
     cardImage.style.display = "block";
 
-},1000);
+},2000);
 
     setTimeout(function(){
 
