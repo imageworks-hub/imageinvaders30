@@ -167,6 +167,90 @@ button{
 
 }
 
+#stageSelectScreen{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100vw;
+    height:100vh;
+
+    background:#020514;
+
+    z-index:1500;
+
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+
+}
+
+#stageSelectScreen h2{
+
+    font-size:48px;
+
+    margin-bottom:60px;
+
+    text-shadow:
+        0 0 10px cyan,
+        0 0 20px cyan;
+
+}
+
+.stageBtn{
+
+    width:280px;
+    height:90px;
+
+    border-radius:20px;
+
+    border:3px solid cyan;
+
+    background:#111;
+
+    color:white;
+
+    font-size:34px;
+    font-weight:bold;
+
+    margin:20px;
+
+    box-shadow:
+        0 0 15px cyan,
+        0 0 30px blue;
+
+    cursor:pointer;
+
+}
+
+@media (max-width:768px){
+
+    #stageSelectScreen h2{
+
+        font-size:32px;
+
+        margin-bottom:40px;
+
+    }
+
+    .stageBtn{
+
+        width:70vw;
+        height:80px;
+
+        font-size:28px;
+
+    }
+
+}
+
 #shopScreen{
 
     display:none;

@@ -60,6 +60,10 @@ const bossImage = new Image();
 
 bossImage.src = "boss.png";
 
+const teamImage = new Image();
+
+teamImage.src = "team.png";
+
 const playerImage = new Image();
 
 playerImage.src = "player.png";
@@ -147,7 +151,7 @@ let bossBullets=[];
 // カード一覧
 /////////////////////////////////////////////////
 
-const cards = [
+const stage1Cards = [
 
 {
     name:"SS ゆいim",
@@ -226,6 +230,37 @@ const cards = [
 
 ];
 
+const stage2Cards = [
+
+{
+    name:"STAGE2 CARD 1",
+    image:"st2card1.png"
+},
+
+{
+    name:"STAGE2 CARD 2",
+    image:"st2card2.png"
+},
+
+{
+    name:"STAGE2 CARD 3",
+    image:"st2card3.png"
+}
+
+];
+
+function getStageCards(){
+
+    if(currentStage === 2){
+
+        return stage2Cards;
+
+    }
+
+    return stage1Cards;
+
+}
+
 /////////////////////////////////////////////////
 // スコア
 /////////////////////////////////////////////////
@@ -235,6 +270,31 @@ let lives=3;
 let gameOver=false;
 let clearFlag = false;
 let damageCooldown = 0;
+
+let currentStage = 1;
+
+const stageSettings = {
+    1:{
+        background:"background.png",
+        enemy:"enemy.png",
+        boss:"boss.png",
+        bossHp:100,
+        bossSpeed:3,
+        enemyDir:0.5,
+        bossBulletCount1:8,
+        bossBulletCount2:12
+    },
+    2:{
+        background:"background2.png",
+        enemy:"enemy2.png",
+        team:"team.png",
+        bossHp:100,
+        bossSpeed:4,
+        enemyDir:0.8,
+        bossBulletCount1:10,
+        bossBulletCount2:16
+    }
+};
 
 let canRestart = false;
 
@@ -291,6 +351,34 @@ const boss={
     dir:1,
     size:90
 };
+
+const team = {
+    x:canvas.width / 2,
+    y:canvas.height * 0.32,
+    speed:2.5,
+    size:65
+};
+
+let teamShotTimer = 0;
+let teamBullets = [];
+
+function applyStage(stageNumber){
+
+    currentStage = stageNumber;
+
+    const setting = stageSettings[stageNumber];
+
+    backgroundImage.src = setting.background;
+    enemyImage.src = setting.enemy;
+    if(setting.boss){
+    bossImage.src = setting.boss;
+}
+
+    boss.hp = setting.bossHp;
+    boss.speed = setting.bossSpeed;
+    enemyDir = setting.enemyDir;
+
+}
 
 let explosions = [];
 
@@ -474,7 +562,8 @@ if(!clearFlag){
 
     boss.angle+=0.03;
 
-    boss.x += boss.speed * boss.dir;
+
+boss.x += boss.speed * boss.dir;
 
 if(boss.x > canvas.width - 80){
 
@@ -485,6 +574,47 @@ if(boss.x > canvas.width - 80){
 if(boss.x < 80){
 
     boss.dir = 1;
+
+}
+
+if(currentStage === 2 && !clearFlag){
+
+    team.y = boss.y + 130;
+
+    if(team.x < player.x){
+        team.x += team.speed;
+    }
+
+    if(team.x > player.x){
+        team.x -= team.speed;
+    }
+
+    if(team.x < 70){
+        team.x = 70;
+    }
+
+    if(team.x > canvas.width - 70){
+        team.x = canvas.width - 70;
+    }
+
+    teamShotTimer++;
+
+    if(teamShotTimer >= 180){
+
+        teamShotTimer = 0;
+
+        const dx = player.x - team.x;
+        const dy = player.y - team.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        teamBullets.push({
+            x:team.x,
+            y:team.y + 30,
+            dx:dx / distance * 6,
+            dy:dy / distance * 6
+        });
+
+    }
 
 }
 
@@ -525,8 +655,10 @@ bossDamageTimer = 10;
 
     clearFlag = true;
 
-    obtainedCard =
-cards[Math.floor(Math.random()*cards.length)];
+    const availableCards = getStageCards();
+
+obtainedCard =
+availableCards[Math.floor(Math.random()*availableCards.length)];
 
 cardImage.src = obtainedCard.image;
 
@@ -663,6 +795,56 @@ bossBullets = bossBullets.filter(b =>
 
 );
 
+teamBullets.forEach(b=>{
+
+    b.x += b.dx;
+    b.y += b.dy;
+
+    if(
+        damageCooldown <= 0 &&
+        Math.abs(b.x-player.x)<20 &&
+        Math.abs(b.y-player.y)<20
+    ){
+        if(barrierCount > 0){
+
+            barrierCount--;
+
+            localStorage.setItem(
+                "barrier",
+                barrierCount
+            );
+
+            if(barrierCount <= 0){
+
+                localStorage.removeItem(
+                    "barrier"
+                );
+
+            }
+
+        }else{
+
+            lives--;
+
+        }
+
+        damageCooldown = 60;
+
+        b.x = -9999;
+        b.y = -9999;
+    }
+
+});
+
+teamBullets = teamBullets.filter(b =>
+
+    b.x > -50 &&
+    b.x < canvas.width + 50 &&
+    b.y > -50 &&
+    b.y < canvas.height + 50
+
+);
+
     }
 
 
@@ -756,6 +938,8 @@ function draw(){
     // ボス
 if(!clearFlag){
 
+    if(bossImage.complete && bossImage.naturalWidth > 0){
+
     ctx.drawImage(
 
         bossImage,
@@ -766,6 +950,20 @@ if(!clearFlag){
         boss.size*2,
         boss.size*2
 
+    );
+
+}
+
+}
+
+if(currentStage === 2 && !clearFlag){
+
+    ctx.drawImage(
+        teamImage,
+        team.x - team.size,
+        team.y - team.size,
+        team.size * 2,
+        team.size * 2
     );
 
 }
@@ -892,6 +1090,16 @@ bossBullets.forEach(b=>{
 
     ctx.beginPath();
     ctx.arc(b.x,b.y,5,0,Math.PI*2);
+    ctx.fill();
+
+});
+
+ctx.fillStyle = "magenta";
+
+teamBullets.forEach(b=>{
+
+    ctx.beginPath();
+    ctx.arc(b.x,b.y,6,0,Math.PI*2);
     ctx.fill();
 
 });
@@ -1039,16 +1247,55 @@ cardImage.onclick = function(){
 
 };
 
-startBtn.onclick = function(){
+const stage1Btn =
+document.getElementById("stage1Btn");
+
+const stage2Btn =
+document.getElementById("stage2Btn");
+
+const stageSelectScreen =
+document.getElementById("stageSelectScreen");
+
+stage1Btn.onclick = function(){
+
+    applyStage(1);
+    startGame();
+
+};
+
+stage2Btn.onclick = function(){
+
+    applyStage(2);
+    startGame();
+
+};
+
+function startGame(){
+
+    stageSelectScreen.style.display = "none";
 
     gameStarted = true;
-
-    titleScreen.style.display = "none";
 
     barrierCount =
     Number(
         localStorage.getItem("barrier")
     ) || 0;
+
+}
+
+startBtn.onclick = function(){
+
+    titleScreen.style.display = "none";
+
+    stageSelectScreen.style.display = "flex";
+
+};
+
+startBtn.onclick = function(){
+
+    titleScreen.style.display = "none";
+
+    document.getElementById("stageSelectScreen").style.display = "flex";
 
 };
 
