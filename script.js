@@ -245,6 +245,66 @@ const stage2Cards = [
 {
     name:"STAGE2 CARD 3",
     image:"st2card3.png"
+},
+
+{
+    name:"STAGE2 CARD 4",
+    image:"st2card4.png"
+},
+
+{
+    name:"STAGE2 CARD 5",
+    image:"st2card5.png"
+},
+
+{
+    name:"STAGE2 CARD 6",
+    image:"st2card6.png"
+},
+
+{
+    name:"STAGE2 CARD 7",
+    image:"st2card7.png"
+},
+
+{
+    name:"STAGE2 CARD 8",
+    image:"st2card8.png"
+},
+
+{
+    name:"STAGE2 CARD 9",
+    image:"st2card9.png"
+},
+
+{
+    name:"STAGE2 CARD 10",
+    image:"st2card10.png"
+},
+
+{
+    name:"STAGE2 CARD 11",
+    image:"st2card11.png"
+},
+
+{
+    name:"STAGE2 CARD 12",
+    image:"st2card12.png"
+},
+
+{
+    name:"STAGE2 CARD 13",
+    image:"st2card13.png"
+},
+
+{
+    name:"STAGE2 CARD 14",
+    image:"st2card14.png"
+},
+
+{
+    name:"STAGE2 CARD 15",
+    image:"st2card15.png"
 }
 
 ];
