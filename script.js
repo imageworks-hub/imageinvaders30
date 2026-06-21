@@ -1099,7 +1099,7 @@ if(barrierCount > 0){
     ctx.arc(
         player.x,
         player.y,
-        55,
+        42,
         0,
         Math.PI * 2
     );
