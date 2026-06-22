@@ -87,6 +87,23 @@ const clearBgImage = new Image();
 
 clearBgImage.src = "clear-bg.png";
 
+const clearBgOverlay = document.createElement("img");
+
+clearBgOverlay.src = "clear-bg.png";
+
+clearBgOverlay.style.display = "none";
+clearBgOverlay.style.position = "fixed";
+clearBgOverlay.style.top = "0";
+clearBgOverlay.style.left = "0";
+clearBgOverlay.style.width = "100vw";
+clearBgOverlay.style.height = "100vh";
+clearBgOverlay.style.objectFit = "contain";
+clearBgOverlay.style.background = "white";
+clearBgOverlay.style.zIndex = "150";
+clearBgOverlay.style.pointerEvents = "none";
+
+document.body.appendChild(clearBgOverlay);
+
 function resize(){
 
     canvas.width = window.innerWidth;
@@ -1154,11 +1171,15 @@ function draw(){
 
     }
 
-    if(clearFlag && clearBgImage.complete){
+    if(clearFlag){
 
-    drawContainImage(clearBgImage);
+        clearBgOverlay.style.display = "block";
 
-}
+    }else{
+
+        clearBgOverlay.style.display = "none";
+
+    }
 
     // ボス…
 
