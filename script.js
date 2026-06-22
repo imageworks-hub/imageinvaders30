@@ -23,8 +23,8 @@ const cardImage = document.getElementById("cardImage");
 
 const enemyImage = new Image();
 
-const enemyW = 60;
-const enemyH = 70;
+const enemyW = 72;
+const enemyH = 84;
 const enemyGlow = 0;
 
 const enemySprite = document.createElement("canvas");
@@ -446,7 +446,7 @@ let teamBullets = [];
 const team3 = {
     x:canvas.width / 2,
     y:canvas.height * 0.32,
-    size:65
+    size:45
 };
 
 let team3ShotTimer = 0;
@@ -717,7 +717,7 @@ if(currentStage === 2 && !clearFlag){
 
 if(currentStage === 3 && !clearFlag){
 
-    team3.x = boss.x;
+    team3.x = canvas.width / 2;
     team3.y = boss.y + 130;
 
     team3ShotTimer++;
