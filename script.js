@@ -320,7 +320,47 @@ const stage2Cards = [
 
 ];
 
+const stage3Cards = [
+
+{
+    name:"STAGE3 CARD 1",
+    image:"st3card1.png"
+},
+
+{
+    name:"STAGE3 CARD 2",
+    image:"st3card2.png"
+},
+
+{
+    name:"STAGE3 CARD 3",
+    image:"st3card3.png"
+},
+
+{
+    name:"STAGE3 CARD 4",
+    image:"st3card4.png"
+},
+
+{
+    name:"STAGE3 CARD 5",
+    image:"st3card5.png"
+},
+
+{
+    name:"STAGE3 CARD 6",
+    image:"st3card6.png"
+}
+
+];
+
 function getStageCards(){
+
+    if(currentStage === 3){
+
+        return stage3Cards;
+
+    }
 
     if(currentStage === 2){
 
