@@ -1374,7 +1374,7 @@ teamBullets.forEach(b=>{
 
 });
 
-ctx.fillStyle = "lime";
+ctx.fillStyle = "#a855ff";
 
 team3Bullets.forEach(b=>{
 
