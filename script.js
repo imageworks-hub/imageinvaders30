@@ -36,6 +36,13 @@ let enemySpriteReady = false;
 
 enemyImage.onload = function(){
 
+    enemySpriteCtx.clearRect(
+        0,
+        0,
+        enemySprite.width,
+        enemySprite.height
+    );
+
     enemySpriteCtx.imageSmoothingEnabled = false;
 
     enemySpriteCtx.filter = "brightness(1.25) contrast(1.15)";
@@ -63,6 +70,10 @@ bossImage.src = "boss.png";
 const teamImage = new Image();
 
 teamImage.src = "team.png";
+
+const team3Image = new Image();
+
+team3Image.src = "team3.png";
 
 const playerImage = new Image();
 
@@ -353,6 +364,16 @@ const stageSettings = {
         enemyDir:0.8,
         bossBulletCount1:10,
         bossBulletCount2:16
+    },
+    3:{
+        background:"background3.png",
+        enemy:"enemy3.png",
+        team:"team3.png",
+        bossHp:100,
+        bossSpeed:4,
+        enemyDir:0.8,
+        bossBulletCount1:10,
+        bossBulletCount2:16
     }
 };
 
@@ -422,17 +443,33 @@ const team = {
 let teamShotTimer = 0;
 let teamBullets = [];
 
+const team3 = {
+    x:canvas.width / 2,
+    y:canvas.height * 0.32,
+    size:65
+};
+
+let team3ShotTimer = 0;
+let team3Bullets = [];
+
 function applyStage(stageNumber){
 
     currentStage = stageNumber;
 
     const setting = stageSettings[stageNumber];
 
+    enemySpriteReady = false;
+
     backgroundImage.src = setting.background;
     enemyImage.src = setting.enemy;
+
     if(setting.boss){
     bossImage.src = setting.boss;
 }
+
+    if(stageNumber === 3 && setting.team){
+        team3Image.src = setting.team;
+    }
 
     boss.hp = setting.bossHp;
     boss.speed = setting.bossSpeed;
@@ -678,6 +715,33 @@ if(currentStage === 2 && !clearFlag){
 
 }
 
+if(currentStage === 3 && !clearFlag){
+
+    team3.x = boss.x;
+    team3.y = boss.y + 130;
+
+    team3ShotTimer++;
+
+    if(team3ShotTimer >= 600){
+
+        team3ShotTimer = 0;
+
+        const dx = player.x - team3.x;
+        const dy = player.y - team3.y;
+        const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+
+        team3Bullets.push({
+            x:team3.x,
+            y:team3.y + 30,
+            dx:dx / distance * 4,
+            dy:dy / distance * 4,
+            speed:4
+        });
+
+    }
+
+}
+
     bullets.forEach(b=>{
 
         enemies.forEach(e=>{
@@ -905,6 +969,63 @@ teamBullets = teamBullets.filter(b =>
 
 );
 
+team3Bullets.forEach(b=>{
+
+    const dx = player.x - b.x;
+    const dy = player.y - b.y;
+    const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+
+    b.dx = b.dx * 0.94 + dx / distance * b.speed * 0.06;
+    b.dy = b.dy * 0.94 + dy / distance * b.speed * 0.06;
+
+    b.x += b.dx;
+    b.y += b.dy;
+
+    if(
+        damageCooldown <= 0 &&
+        Math.abs(b.x-player.x)<22 &&
+        Math.abs(b.y-player.y)<22
+    ){
+        if(barrierCount > 0){
+
+            barrierCount--;
+
+            localStorage.setItem(
+                "barrier",
+                barrierCount
+            );
+
+            if(barrierCount <= 0){
+
+                localStorage.removeItem(
+                    "barrier"
+                );
+
+            }
+
+        }else{
+
+            lives--;
+
+        }
+
+        damageCooldown = 60;
+
+        b.x = -9999;
+        b.y = -9999;
+    }
+
+});
+
+team3Bullets = team3Bullets.filter(b =>
+
+    b.x > -80 &&
+    b.x < canvas.width + 80 &&
+    b.y > -80 &&
+    b.y < canvas.height + 80
+
+);
+
     }
 
 
@@ -1016,7 +1137,12 @@ if(!clearFlag){
 
 }
 
-if(currentStage === 2 && !clearFlag){
+if(
+    currentStage === 2 &&
+    !clearFlag &&
+    teamImage.complete &&
+    teamImage.naturalWidth > 0
+){
 
     ctx.drawImage(
         teamImage,
@@ -1024,6 +1150,23 @@ if(currentStage === 2 && !clearFlag){
         team.y - team.size,
         team.size * 2,
         team.size * 2
+    );
+
+}
+
+if(
+    currentStage === 3 &&
+    !clearFlag &&
+    team3Image.complete &&
+    team3Image.naturalWidth > 0
+){
+
+    ctx.drawImage(
+        team3Image,
+        team3.x - team3.size,
+        team3.y - team3.size,
+        team3.size * 2,
+        team3.size * 2
     );
 
 }
@@ -1160,6 +1303,16 @@ teamBullets.forEach(b=>{
 
     ctx.beginPath();
     ctx.arc(b.x,b.y,6,0,Math.PI*2);
+    ctx.fill();
+
+});
+
+ctx.fillStyle = "lime";
+
+team3Bullets.forEach(b=>{
+
+    ctx.beginPath();
+    ctx.arc(b.x,b.y,7,0,Math.PI*2);
     ctx.fill();
 
 });
@@ -1313,6 +1466,9 @@ document.getElementById("stage1Btn");
 const stage2Btn =
 document.getElementById("stage2Btn");
 
+const stage3Btn =
+document.getElementById("stage3Btn");
+
 const stageSelectScreen =
 document.getElementById("stageSelectScreen");
 
@@ -1326,6 +1482,13 @@ stage1Btn.onclick = function(){
 stage2Btn.onclick = function(){
 
     applyStage(2);
+    startGame();
+
+};
+
+stage3Btn.onclick = function(){
+
+    applyStage(3);
     startGame();
 
 };
@@ -1348,14 +1511,6 @@ startBtn.onclick = function(){
     titleScreen.style.display = "none";
 
     stageSelectScreen.style.display = "flex";
-
-};
-
-startBtn.onclick = function(){
-
-    titleScreen.style.display = "none";
-
-    document.getElementById("stageSelectScreen").style.display = "flex";
 
 };
 
