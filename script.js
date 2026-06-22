@@ -124,6 +124,10 @@ function drawContainImage(image){
 
     }
 
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
     ctx.drawImage(
         image,
         drawX,
@@ -131,6 +135,8 @@ function drawContainImage(image){
         drawWidth,
         drawHeight
     );
+
+    ctx.restore();
 
 }
 
