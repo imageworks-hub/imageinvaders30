@@ -129,6 +129,43 @@ button{
     z-index:1001;
 }
 
+#startBtn.purchased{
+
+    border:3px solid rgba(255,255,255,0.9);
+
+    border-radius:18px;
+
+    box-shadow:
+        0 0 12px white,
+        0 0 28px cyan,
+        0 0 52px #7c3cff;
+
+    animation:startGlow 0.9s infinite alternate;
+
+}
+
+@keyframes startGlow{
+
+    from{
+
+        box-shadow:
+            0 0 8px white,
+            0 0 20px cyan,
+            0 0 36px #7c3cff;
+
+    }
+
+    to{
+
+        box-shadow:
+            0 0 18px white,
+            0 0 36px cyan,
+            0 0 72px #7c3cff;
+
+    }
+
+}
+
 #shopBtn{
 
     position:absolute;

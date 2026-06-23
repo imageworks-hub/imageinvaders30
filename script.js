@@ -4,6 +4,12 @@ document.getElementById("titleScreen");
 const startBtn =
 document.getElementById("startBtn");
 
+if(Number(localStorage.getItem("barrier")) > 0){
+
+    startBtn.classList.add("purchased");
+
+}
+
 const titleImage =
 document.getElementById("titleImage");
 
@@ -1657,6 +1663,8 @@ function startGame(){
 }
 
 startBtn.onclick = function(){
+
+    startBtn.classList.remove("purchased");
 
     titleScreen.style.display = "none";
 
