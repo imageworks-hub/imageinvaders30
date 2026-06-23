@@ -373,6 +373,51 @@ const stage3Cards = [
 {
     name:"STAGE3 CARD 6",
     image:"st3card6.png"
+},
+
+{
+    name:"STAGE3 CARD 7",
+    image:"st3card7.png"
+},
+
+{
+    name:"STAGE3 CARD 8",
+    image:"st3card8.png"
+},
+
+{
+    name:"STAGE3 CARD 9",
+    image:"st3card9.png"
+},
+
+{
+    name:"STAGE3 CARD 10",
+    image:"st3card10.png"
+},
+
+{
+    name:"STAGE3 CARD 11",
+    image:"st3card11.png"
+},
+
+{
+    name:"STAGE3 CARD 12",
+    image:"st3card12.png"
+},
+
+{
+    name:"STAGE3 CARD 13",
+    image:"st3card13.png"
+},
+
+{
+    name:"STAGE3 CARD 14",
+    image:"st3card14.png"
+},
+
+{
+    name:"STAGE3 CARD 15",
+    image:"st3card15.png"
 }
 
 ];
