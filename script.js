@@ -168,6 +168,9 @@ const player = {
     size:60
 };
 
+let playerStartY = player.y;
+let playerEntering = false;
+
 let targetX = player.x;
 let targetY = player.y;
 
@@ -616,6 +619,10 @@ canvas.addEventListener("touchstart",(e)=>{
 
 }
 
+    if(playerEntering){
+        return;
+    }
+
     bullets.push({
     x: player.x,
     y: player.y - player.size + 10
@@ -651,6 +658,24 @@ if(bossDamageTimer > 0){
     bossDamageTimer--;
 }
 
+if(playerEntering){
+
+    player.y += (playerStartY - player.y) * 0.08;
+    player.x += (canvas.width / 2 - player.x) * 0.08;
+    targetX = player.x;
+    targetY = playerStartY;
+
+    if(Math.abs(player.y - playerStartY) < 2){
+
+        player.y = playerStartY;
+        playerEntering = false;
+        targetX = player.x;
+        targetY = player.y;
+
+    }
+
+}else{
+
     if(moveLeft){
     player.x -= player.speed;
 }
@@ -674,6 +699,8 @@ if(moveLeft || moveRight || moveUp || moveDown){
 
 player.x += (targetX - player.x) * 0.3;
 player.y += (targetY - player.y) * 0.3;
+
+}
 
 if(player.x < 20){
     player.x = 20;
@@ -1532,6 +1559,10 @@ document.addEventListener("keydown", function(e){
 
 }else{
 
+    if(playerEntering){
+        return;
+    }
+
     bullets.push({
         x:player.x,
         y:player.y - player.size + 10
@@ -1608,6 +1639,13 @@ stage3Btn.onclick = function(){
 function startGame(){
 
     stageSelectScreen.style.display = "none";
+
+    playerStartY = canvas.height - 100;
+    player.x = canvas.width / 2;
+    player.y = canvas.height + 90;
+    targetX = player.x;
+    targetY = playerStartY;
+    playerEntering = true;
 
     gameStarted = true;
 
