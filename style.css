@@ -241,6 +241,34 @@ button{
 
 }
 
+#stageBackBtn{
+
+    position:absolute;
+
+    top:24px;
+    left:24px;
+
+    width:56px;
+    height:56px;
+
+    border:none;
+    border-radius:0;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:46px;
+    line-height:56px;
+
+    text-shadow:
+        0 0 10px cyan,
+        0 0 20px blue;
+
+    cursor:pointer;
+
+}
+
 .stageBtn{
 
     width:280px;

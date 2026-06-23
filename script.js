@@ -1618,6 +1618,9 @@ document.getElementById("stage2Btn");
 const stage3Btn =
 document.getElementById("stage3Btn");
 
+const stageBackBtn =
+document.getElementById("stageBackBtn");
+
 const stageSelectScreen =
 document.getElementById("stageSelectScreen");
 
@@ -1639,6 +1642,19 @@ stage3Btn.onclick = function(){
 
     applyStage(3);
     startGame();
+
+};
+
+stageBackBtn.onclick = function(){
+
+    stageSelectScreen.style.display = "none";
+    titleScreen.style.display = "flex";
+
+    if(Number(localStorage.getItem("barrier")) > 0){
+
+        startBtn.classList.add("purchased");
+
+    }
 
 };
 
