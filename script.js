@@ -168,6 +168,17 @@ if(stage4CommentForm){
         stage4CommentInput.value = "";
         stage4CommentInput.blur();
 
+        if(
+            currentStage === 4 &&
+            gameStarted &&
+            !clearFlag &&
+            !gameOver
+        ){
+
+            damageBossByComment();
+
+        }
+
         renderStage4Comments();
 
     });
@@ -861,6 +872,62 @@ function applyStage(stageNumber){
 let explosions = [];
 
 let bossDamageTimer = 0;
+
+function triggerClear(){
+
+    if(clearFlag)return;
+
+    clearFlag = true;
+
+    const availableCards = getStageCards();
+
+    obtainedCard =
+    availableCards[Math.floor(Math.random()*availableCards.length)];
+
+    cardImage.src = obtainedCard.image;
+
+    setTimeout(function(){
+
+        saveBtn.style.display = "block";
+        document.getElementById("saveMessage").style.display = "block";
+        cardImage.style.display = "block";
+
+    },2000);
+
+    setTimeout(function(){
+
+        canRestart = true;
+
+    },2000);
+
+    for(let i=0;i<50;i++){
+
+        explosions.push({
+
+            x:boss.x,
+            y:boss.y,
+            dx:(Math.random()-0.5)*10,
+            dy:(Math.random()-0.5)*10,
+            size:10+Math.random()*20
+
+        });
+
+    }
+
+}
+
+function damageBossByComment(){
+
+    boss.hp = Math.max(0, boss.hp - 50);
+    bossDamageTimer = 40;
+
+    if(boss.hp <= 0){
+
+        triggerClear();
+
+    }
+
+}
 
 
 
