@@ -33,6 +33,19 @@ button{
     color:white;
 }
 
+#saveBtn{
+
+    display:none;
+
+    position:fixed;
+
+    left:16px;
+    bottom:16px;
+
+    z-index:250;
+
+}
+
 #saveMessage{
 
     display:none;
