@@ -74,6 +74,139 @@ button{
 
 }
 
+#stage4CommentBox{
+
+    display:none;
+
+    position:fixed;
+
+    left:50%;
+    bottom:12px;
+
+    transform:translateX(-50%);
+
+    width:min(92vw,520px);
+
+    z-index:120;
+
+    pointer-events:auto;
+
+}
+
+#stage4CommentLog{
+
+    height:28px;
+
+    overflow:hidden;
+
+    margin-bottom:6px;
+
+    color:white;
+
+    font-size:13px;
+    font-family:monospace;
+
+    text-shadow:
+        0 0 6px cyan,
+        0 0 12px blue;
+
+}
+
+.stage4CommentItem{
+
+    display:none;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+    animation:commentFloat 2.4s ease-in-out;
+
+}
+
+.stage4CommentItem.active{
+
+    display:block;
+
+}
+
+@keyframes commentFloat{
+
+    0%{
+
+        opacity:0;
+        transform:translateY(12px);
+
+    }
+
+    18%{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+    78%{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+    100%{
+
+        opacity:0;
+        transform:translateY(-10px);
+
+    }
+
+}
+
+#stage4CommentForm{
+
+    display:flex;
+    gap:6px;
+
+}
+
+#stage4CommentInput{
+
+    flex:1;
+
+    min-width:0;
+    height:36px;
+
+    border:2px solid rgba(0,255,255,0.75);
+    border-radius:6px;
+
+    background:rgba(0,0,0,0.72);
+
+    color:white;
+
+    font-size:14px;
+    padding:0 10px;
+
+    outline:none;
+
+}
+
+#stage4CommentSend{
+
+    width:70px;
+    height:36px;
+
+    border-radius:6px;
+    border:2px solid cyan;
+
+    background:rgba(0,30,60,0.86);
+
+    color:white;
+
+    font-size:13px;
+    font-weight:bold;
+
+}
+
 @keyframes saveFlash{
 
     from{

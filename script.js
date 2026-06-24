@@ -55,6 +55,125 @@ document.getElementById("saveBtn");
 
 const cardImage = document.getElementById("cardImage");
 
+const stage4CommentBox =
+document.getElementById("stage4CommentBox");
+
+const stage4CommentLog =
+document.getElementById("stage4CommentLog");
+
+const stage4CommentForm =
+document.getElementById("stage4CommentForm");
+
+const stage4CommentInput =
+document.getElementById("stage4CommentInput");
+
+let stage4Comments = [];
+let stage4CommentIndex = 0;
+let stage4CommentTimer = null;
+
+function loadStage4Comments(){
+
+    try{
+
+        stage4Comments =
+        JSON.parse(localStorage.getItem("stage4Comments")) || [];
+
+    }catch(e){
+
+        stage4Comments = [];
+
+    }
+
+}
+
+function renderStage4Comments(){
+
+    if(!stage4CommentLog)return;
+
+    stage4CommentLog.innerHTML = "";
+
+    if(stage4Comments.length === 0)return;
+
+    const comment =
+    stage4Comments[stage4CommentIndex % stage4Comments.length];
+
+    const item = document.createElement("div");
+
+    item.className = "stage4CommentItem active";
+    item.textContent = "▶ " + comment;
+
+    stage4CommentLog.appendChild(item);
+
+    stage4CommentIndex++;
+
+}
+
+function setStage4CommentVisible(visible){
+
+    if(!stage4CommentBox)return;
+
+    stage4CommentBox.style.display = visible ? "block" : "none";
+
+    if(visible){
+
+        renderStage4Comments();
+
+        if(!stage4CommentTimer){
+
+            stage4CommentTimer =
+            setInterval(renderStage4Comments,2800);
+
+        }
+
+    }else if(stage4CommentTimer){
+
+        clearInterval(stage4CommentTimer);
+        stage4CommentTimer = null;
+
+    }
+
+}
+
+function isStage4CommentEditing(){
+
+    return (
+        currentStage === 4 &&
+        stage4CommentInput &&
+        document.activeElement === stage4CommentInput
+    );
+
+}
+
+loadStage4Comments();
+renderStage4Comments();
+
+if(stage4CommentForm){
+
+    stage4CommentForm.addEventListener("submit",function(e){
+
+        e.preventDefault();
+
+        const text = stage4CommentInput.value.trim();
+
+        if(!text)return;
+
+        stage4Comments.push(text);
+        stage4Comments = stage4Comments.slice(-20);
+
+        localStorage.setItem(
+            "stage4Comments",
+            JSON.stringify(stage4Comments)
+        );
+
+        stage4CommentInput.value = "";
+        stage4CommentInput.blur();
+
+        renderStage4Comments();
+
+    });
+
+}
+
 
 
 const enemyImage = new Image();
@@ -788,6 +907,8 @@ canvas.addEventListener("touchstart",(e)=>{
 function update(){
 
     if(!gameStarted) return;
+
+    if(isStage4CommentEditing()) return;
 
     if(gameOver) return;
   
@@ -1809,6 +1930,10 @@ loop();
 
 document.addEventListener("keydown", function(e){
 
+    if(document.activeElement === stage4CommentInput){
+        return;
+    }
+
     if(
         e.key === "ArrowLeft" ||
         e.key === "ArrowRight" ||
@@ -1926,6 +2051,7 @@ stageBackBtn.onclick = function(){
 
     stageSelectScreen.style.display = "none";
     titleScreen.style.display = "flex";
+    setStage4CommentVisible(false);
 
     if(Number(localStorage.getItem("barrier")) > 0){
 
@@ -1938,6 +2064,8 @@ stageBackBtn.onclick = function(){
 function startGame(){
 
     stageSelectScreen.style.display = "none";
+
+    setStage4CommentVisible(currentStage === 4);
 
     playerStartY = canvas.height - 100;
     player.x = canvas.width / 2;
