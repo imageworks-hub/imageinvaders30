@@ -29,8 +29,8 @@ const cardImage = document.getElementById("cardImage");
 
 const enemyImage = new Image();
 
-const enemyW = 72;
-const enemyH = 84;
+const enemyW = 64;
+const enemyH = 74;
 const enemyGlow = 0;
 
 const enemySprite = document.createElement("canvas");
@@ -80,6 +80,10 @@ teamImage.src = "team.png";
 const team3Image = new Image();
 
 team3Image.src = "team3.png";
+
+const team4Image = new Image();
+
+team4Image.src = "team4.png";
 
 const playerImage = new Image();
 
@@ -160,6 +164,42 @@ function drawContainImage(image){
     );
 
     ctx.restore();
+
+}
+
+function drawCoverImage(image){
+
+    const imageRatio = image.width / image.height;
+    const canvasRatio = canvas.width / canvas.height;
+
+    let drawWidth;
+    let drawHeight;
+    let drawX;
+    let drawY;
+
+    if(canvasRatio > imageRatio){
+
+        drawWidth = canvas.width;
+        drawHeight = canvas.width / imageRatio;
+        drawX = 0;
+        drawY = (canvas.height - drawHeight) / 2;
+
+    }else{
+
+        drawHeight = canvas.height;
+        drawWidth = canvas.height * imageRatio;
+        drawX = (canvas.width - drawWidth) / 2;
+        drawY = 0;
+
+    }
+
+    ctx.drawImage(
+        image,
+        drawX,
+        drawY,
+        drawWidth,
+        drawHeight
+    );
 
 }
 
@@ -491,6 +531,16 @@ const stageSettings = {
         enemyDir:0.8,
         bossBulletCount1:10,
         bossBulletCount2:16
+    },
+    4:{
+        background:"background4.png",
+        enemy:"enemy4.png",
+        team:"team4.png",
+        bossHp:100,
+        bossSpeed:4,
+        enemyDir:0.8,
+        bossBulletCount1:10,
+        bossBulletCount2:16
     }
 };
 
@@ -569,6 +619,19 @@ const team3 = {
 let team3ShotTimer = 0;
 let team3Bullets = [];
 
+const team4 = {
+    x:canvas.width / 2,
+    y:canvas.height * 0.35,
+    targetX:canvas.width / 2,
+    targetY:canvas.height * 0.35,
+    speed:3.2,
+    jitter:0,
+    size:55
+};
+
+let team4ShotTimer = 0;
+let team4Bullets = [];
+
 function applyStage(stageNumber){
 
     currentStage = stageNumber;
@@ -586,6 +649,17 @@ function applyStage(stageNumber){
 
     if(stageNumber === 3 && setting.team){
         team3Image.src = setting.team;
+    }
+
+    if(stageNumber === 4 && setting.team){
+        team4Image.src = setting.team;
+        team4.x = canvas.width / 2;
+        team4.y = canvas.height * 0.35;
+        team4.targetX = team4.x;
+        team4.targetY = team4.y;
+        team4.jitter = 0;
+        team4ShotTimer = 0;
+        team4Bullets = [];
     }
 
     boss.hp = setting.bossHp;
@@ -883,6 +957,57 @@ if(currentStage === 3 && !clearFlag){
 
 }
 
+if(currentStage === 4 && !clearFlag){
+
+    team4.jitter--;
+
+    const minX = team4.size;
+    const maxX = canvas.width - team4.size;
+    const minY = boss.y + 110;
+    const maxY = canvas.height * 0.68;
+    const dx = team4.targetX - team4.x;
+    const dy = team4.targetY - team4.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if(distance < 18 || team4.jitter <= 0){
+
+        team4.targetX = minX + Math.random() * (maxX - minX);
+        team4.targetY = minY + Math.random() * (maxY - minY);
+        team4.jitter = 35 + Math.random() * 55;
+
+    }else{
+
+        team4.x += dx / distance * team4.speed;
+        team4.y += dy / distance * team4.speed;
+
+    }
+
+    team4.x = Math.max(minX, Math.min(maxX, team4.x));
+    team4.y = Math.max(minY, Math.min(maxY, team4.y));
+
+    team4ShotTimer++;
+
+    if(team4ShotTimer >= 180){
+
+        team4ShotTimer = 0;
+
+        for(let i=0;i<6;i++){
+
+            let angle = i * Math.PI * 2 / 6;
+
+            team4Bullets.push({
+                x:team4.x,
+                y:team4.y,
+                dx:Math.cos(angle) * 5,
+                dy:Math.sin(angle) * 5
+            });
+
+        }
+
+    }
+
+}
+
     bullets.forEach(b=>{
 
         enemies.forEach(e=>{
@@ -1167,6 +1292,56 @@ team3Bullets = team3Bullets.filter(b =>
 
 );
 
+team4Bullets.forEach(b=>{
+
+    b.x += b.dx;
+    b.y += b.dy;
+
+    if(
+        damageCooldown <= 0 &&
+        Math.abs(b.x-player.x)<22 &&
+        Math.abs(b.y-player.y)<22
+    ){
+        if(barrierCount > 0){
+
+            barrierCount--;
+
+            localStorage.setItem(
+                "barrier",
+                barrierCount
+            );
+
+            if(barrierCount <= 0){
+
+                localStorage.removeItem(
+                    "barrier"
+                );
+
+            }
+
+        }else{
+
+            lives--;
+
+        }
+
+        damageCooldown = 60;
+
+        b.x = -9999;
+        b.y = -9999;
+    }
+
+});
+
+team4Bullets = team4Bullets.filter(b =>
+
+    b.x > -80 &&
+    b.x < canvas.width + 80 &&
+    b.y > -80 &&
+    b.y < canvas.height + 80
+
+);
+
     }
 
 
@@ -1239,13 +1414,7 @@ function draw(){
 
     if(backgroundImage.complete){
 
-        ctx.drawImage(
-            backgroundImage,
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
+        drawCoverImage(backgroundImage);
 
     }
 
@@ -1312,6 +1481,23 @@ if(
         team3.y - team3.size,
         team3.size * 2,
         team3.size * 2
+    );
+
+}
+
+if(
+    currentStage === 4 &&
+    !clearFlag &&
+    team4Image.complete &&
+    team4Image.naturalWidth > 0
+){
+
+    ctx.drawImage(
+        team4Image,
+        team4.x - team4.size,
+        team4.y - team4.size,
+        team4.size * 2,
+        team4.size * 2
     );
 
 }
@@ -1458,6 +1644,16 @@ team3Bullets.forEach(b=>{
 
     ctx.beginPath();
     ctx.arc(b.x,b.y,7,0,Math.PI*2);
+    ctx.fill();
+
+});
+
+ctx.fillStyle="orange";
+
+team4Bullets.forEach(b=>{
+
+    ctx.beginPath();
+    ctx.arc(b.x,b.y,5,0,Math.PI*2);
     ctx.fill();
 
 });
@@ -1618,6 +1814,9 @@ document.getElementById("stage2Btn");
 const stage3Btn =
 document.getElementById("stage3Btn");
 
+const stage4Btn =
+document.getElementById("stage4Btn");
+
 const stageBackBtn =
 document.getElementById("stageBackBtn");
 
@@ -1641,6 +1840,13 @@ stage2Btn.onclick = function(){
 stage3Btn.onclick = function(){
 
     applyStage(3);
+    startGame();
+
+};
+
+stage4Btn.onclick = function(){
+
+    applyStage(4);
     startGame();
 
 };
