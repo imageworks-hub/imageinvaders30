@@ -116,14 +116,30 @@ document.body.appendChild(clearBgOverlay);
 
 function resize(){
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const viewportWidth =
+    Math.floor(window.visualViewport?.width || window.innerWidth);
+
+    const viewportHeight =
+    Math.floor(window.visualViewport?.height || window.innerHeight);
+
+    canvas.width = viewportWidth;
+    canvas.height = viewportHeight;
+
+    canvas.style.width = viewportWidth + "px";
+    canvas.style.height = viewportHeight + "px";
 
 }
 
 resize();
 
 window.addEventListener("resize", resize);
+
+if(window.visualViewport){
+
+    window.visualViewport.addEventListener("resize", resize);
+    window.visualViewport.addEventListener("scroll", resize);
+
+}
 
 function drawContainImage(image){
 

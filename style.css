@@ -3,12 +3,14 @@ body{
     background:#000;
     overflow:hidden;
     touch-action:none;
+    width:100vw;
+    height:100dvh;
 }
 
 canvas{
     display:block;
     width:100vw;
-    height:100vh;
+    height:100dvh;
     background:#020514;
 }
 
