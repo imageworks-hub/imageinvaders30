@@ -487,7 +487,32 @@ const stage3Cards = [
 
 ];
 
+const stage4Cards = [
+
+{
+    name:"STAGE4 CARD 1",
+    image:"st4card1.png"
+},
+
+{
+    name:"STAGE4 CARD 2",
+    image:"st4card2.png"
+},
+
+{
+    name:"STAGE4 CARD 3",
+    image:"st4card3.png"
+}
+
+];
+
 function getStageCards(){
+
+    if(currentStage === 4){
+
+        return stage4Cards;
+
+    }
 
     if(currentStage === 3){
 
