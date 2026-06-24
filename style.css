@@ -219,6 +219,33 @@ button{
 
 }
 
+#accessCounter{
+
+    position:absolute;
+
+    left:50%;
+    bottom:18px;
+
+    transform:translateX(-50%);
+
+    z-index:1001;
+
+    color:white;
+
+    font-family:monospace;
+    font-size:16px;
+    font-weight:bold;
+
+    letter-spacing:0;
+
+    text-shadow:
+        0 0 8px cyan,
+        0 0 16px blue;
+
+    pointer-events:none;
+
+}
+
 #stageSelectScreen{
 
     display:none;

@@ -13,6 +13,36 @@ if(Number(localStorage.getItem("barrier")) > 0){
 const titleImage =
 document.getElementById("titleImage");
 
+const accessCount =
+document.getElementById("accessCount");
+
+if(accessCount){
+
+    fetch("https://api.countapi.xyz/hit/imageinvaders30/title")
+    .then(response => response.json())
+    .then(data => {
+
+        accessCount.textContent =
+        String(data.value).padStart(6,"0");
+
+    })
+    .catch(() => {
+
+        const localAccess =
+        Number(localStorage.getItem("localAccessCount")) + 1;
+
+        localStorage.setItem(
+            "localAccessCount",
+            localAccess
+        );
+
+        accessCount.textContent =
+        String(localAccess).padStart(6,"0");
+
+    });
+
+}
+
 let gameStarted = false;
 let startWait = 0;
 
