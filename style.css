@@ -340,7 +340,7 @@ button{
 
 }
 
-/* スマホ */
+/* スマ�E */
 @media (max-width:768px){
 
     #shopBtn{
@@ -447,6 +447,8 @@ button{
 
 .stageBtn{
 
+    position:relative;
+
     width:280px;
     height:90px;
 
@@ -471,6 +473,35 @@ button{
 
 }
 
+.stageLabel{
+
+    display:block;
+
+}
+
+.stageDifficulty{
+
+    position:absolute;
+
+    right:12px;
+    bottom:8px;
+
+    color:gold;
+
+    font-size:18px;
+    line-height:1;
+
+    letter-spacing:1px;
+
+    text-shadow:
+        0 0 6px gold,
+        0 0 12px orange,
+        0 0 22px yellow;
+
+    pointer-events:none;
+
+}
+
 @media (max-width:768px){
 
     #stageSelectScreen h2{
@@ -489,7 +520,14 @@ button{
         font-size:28px;
 
     }
+    .stageDifficulty{
 
+        right:10px;
+        bottom:7px;
+
+        font-size:15px;
+
+    }
 }
 
 #shopScreen{
@@ -601,7 +639,7 @@ button{
 
 }
 
-/* スマホ用 */
+/* スマ�E用 */
 @media (max-width:768px){
 
     #shopScreen h2{
