@@ -1908,11 +1908,16 @@ heartItems.forEach(h=>{
 
     ctx.shadowColor = "gold";
     ctx.shadowBlur = 26;
-    ctx.fillStyle = "rgba(255,215,0,0.65)";
+    ctx.fillStyle = "rgba(255,215,0,0.45)";
 
+    ctx.save();
+    ctx.scale(1.35,1.35);
     ctx.beginPath();
-    ctx.arc(0,0,22,0,Math.PI*2);
+    ctx.moveTo(0,10);
+    ctx.bezierCurveTo(-24,-8,-12,-24,0,-12);
+    ctx.bezierCurveTo(12,-24,24,-8,0,10);
     ctx.fill();
+    ctx.restore();
 
     ctx.shadowColor = "gold";
     ctx.shadowBlur = 18;
