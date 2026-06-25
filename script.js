@@ -413,12 +413,12 @@ let bossBullets=[];
 const stage1Cards = [
 
 {
-    name:"SS ゆいim",
+    name:"SS めE��im",
     image:"card1.png"
 },
 
 {
-    name:"SS ゆうちim",
+    name:"SS めE��ちim",
     image:"card2.png"
 },
 
@@ -433,7 +433,7 @@ const stage1Cards = [
 },
 
 {
-    name:"S いくみim",
+    name:"S ぁE��みim",
     image:"card5.png"
 },
 
@@ -453,17 +453,17 @@ const stage1Cards = [
 },
 
 {
-    name:"S  ななえim",
+    name:"S  ななぁEm",
     image:"card9.png"
 },
 
 {
-    name:"A  いこim",
+    name:"A  ぁE��im",
     image:"card10.png"
 },
 
 {
-    name:"A よこやim",
+    name:"A よこめEm",
     image:"card11.png"
 },
 
@@ -824,7 +824,7 @@ if(localStorage.getItem("barrier")){
 }
 
 /////////////////////////////////////////////////
-// 敵42体
+// 敵42佁E
 /////////////////////////////////////////////////
 
 let enemies=[];
@@ -835,13 +835,15 @@ for(let r=0;r<6;r++){
         enemies.push({
             x: canvas.width*(c+1)/8,
             y: canvas.height*0.1+r*50,
-            alive: true
+            alive: true,
+            hasHeart: false
         });
 
     }
 }
 
 let enemyDir = 0.5;
+let heartItems = [];
 
 
 
@@ -921,6 +923,18 @@ function applyStage(stageNumber){
         team4.jitter = 0;
         team4ShotTimer = 0;
         team4Bullets = [];
+        heartItems = [];
+
+        enemies.forEach(e=>{
+            e.hasHeart = false;
+        });
+
+        const heartEnemy =
+        enemies[Math.floor(Math.random()*enemies.length)];
+
+        if(heartEnemy){
+            heartEnemy.hasHeart = true;
+        }
     }
 
     boss.hp = setting.bossHp;
@@ -992,7 +1006,7 @@ function damageBossByComment(){
 
 
 /////////////////////////////////////////////////
-// スマホ操作
+// スマ�E操佁E
 /////////////////////////////////////////////////
 
 canvas.addEventListener("touchmove",(e)=>{
@@ -1008,7 +1022,7 @@ canvas.addEventListener("touchstart",(e)=>{
 
     e.preventDefault();
 
-    // GAME OVERまたはCLEARならリスタート
+    // GAME OVERまた�ECLEARならリスターチE
     if((gameOver || clearFlag) && canRestart){
 
     location.reload();
@@ -1340,6 +1354,17 @@ if(currentStage === 4 && !clearFlag){
                 e.alive=false;
                 score+=10;
                 b.y=-100;
+
+                if(currentStage === 4 && e.hasHeart){
+
+                    heartItems.push({
+                        x:e.x,
+                        y:e.y
+                    });
+
+                    e.hasHeart = false;
+
+                }
             }
 
         });
@@ -1359,7 +1384,7 @@ b.y = -100;
 
 bossDamageTimer = 10;
 
-            // ボス撃破
+            // ボス撁E��
     if(boss.hp <= 0 && !clearFlag){
 
     clearFlag = true;
@@ -1661,6 +1686,22 @@ team4Bullets = team4Bullets.filter(b =>
 
 );
 
+heartItems.forEach(h=>{
+
+    if(
+        Math.abs(h.x-player.x)<28 &&
+        Math.abs(h.y-player.y)<28
+    ){
+
+        lives = Math.min(3,lives + 1);
+        h.collected = true;
+
+    }
+
+});
+
+heartItems = heartItems.filter(h=>!h.collected);
+
     }
 
 
@@ -1859,6 +1900,25 @@ enemies.forEach(e=>{
 });
 
     // プレイヤー
+heartItems.forEach(h=>{
+
+    ctx.save();
+    ctx.translate(h.x,h.y);
+    ctx.scale(1.1,1.1);
+    ctx.fillStyle = "hotpink";
+    ctx.shadowColor = "red";
+    ctx.shadowBlur = 14;
+
+    ctx.beginPath();
+    ctx.moveTo(0,10);
+    ctx.bezierCurveTo(-24,-8,-12,-24,0,-12);
+    ctx.bezierCurveTo(12,-24,24,-8,0,10);
+    ctx.fill();
+
+    ctx.restore();
+
+});
+
 if(
     damageCooldown <= 0 ||
     Math.floor(damageCooldown / 5) % 2 === 0
@@ -1879,14 +1939,14 @@ if(
 }
 
 // プレイヤーの周りにバリア表示
-// エネルギードーム
+// エネルギード�Eム
 if(barrierCount > 0){
 
-    // 発光
+    // 発允E
     ctx.shadowColor = "#66ccff";
     ctx.shadowBlur = 20;
 
-    // ドーム内部
+    // ド�Eム冁E��
     ctx.beginPath();
 
     ctx.arc(
@@ -1900,7 +1960,7 @@ if(barrierCount > 0){
     ctx.fillStyle = "rgba(80,170,255,0.15)";
     ctx.fill();
 
-    // 外側の輪
+    // 外�Eの輪
     ctx.lineWidth = 3;
     ctx.strokeStyle = "#99ddff";
     ctx.stroke();
