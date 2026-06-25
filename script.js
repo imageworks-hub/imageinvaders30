@@ -1905,7 +1905,7 @@ heartItems.forEach(h=>{
     ctx.save();
     ctx.translate(h.x,h.y);
     ctx.scale(1.1,1.1);
-    ctx.fillStyle = "hotpink";
+    ctx.fillStyle = "red";
     ctx.shadowColor = "red";
     ctx.shadowBlur = 14;
 
