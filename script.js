@@ -662,6 +662,66 @@ const stage4Cards = [
 {
     name:"STAGE4 CARD 3",
     image:"st4card3.png"
+},
+
+{
+    name:"STAGE4 CARD 4",
+    image:"st4card4.png"
+},
+
+{
+    name:"STAGE4 CARD 5",
+    image:"st4card5.png"
+},
+
+{
+    name:"STAGE4 CARD 6",
+    image:"st4card6.png"
+},
+
+{
+    name:"STAGE4 CARD 7",
+    image:"st4card7.png"
+},
+
+{
+    name:"STAGE4 CARD 8",
+    image:"st4card8.png"
+},
+
+{
+    name:"STAGE4 CARD 9",
+    image:"st4card9.png"
+},
+
+{
+    name:"STAGE4 CARD 10",
+    image:"st4card10.png"
+},
+
+{
+    name:"STAGE4 CARD 11",
+    image:"st4card11.png"
+},
+
+{
+    name:"STAGE4 CARD 12",
+    image:"st4card12.png"
+},
+
+{
+    name:"STAGE4 CARD 13",
+    image:"st4card13.png"
+},
+
+{
+    name:"STAGE4 CARD 14",
+    image:"st4card14.png"
+},
+
+{
+    name:"STAGE4 CARD 15",
+    image:"st4card15.png"
 }
 
 ];

@@ -101,14 +101,15 @@ button{
 
     margin-bottom:6px;
 
-    color:white;
+    color:#fff36a;
 
     font-size:13px;
     font-family:monospace;
 
     text-shadow:
-        0 0 6px cyan,
-        0 0 12px blue;
+        0 0 6px yellow,
+        0 0 14px gold,
+        0 0 24px #fff36a;
 
 }
 
@@ -176,12 +177,12 @@ button{
     min-width:0;
     height:36px;
 
-    border:2px solid rgba(0,255,255,0.75);
+    border:2px solid rgba(255,245,0,0.9);
     border-radius:6px;
 
-    background:rgba(0,0,0,0.72);
+    background:rgba(35,30,0,0.78);
 
-    color:white;
+    color:#fff36a;
 
     font-size:14px;
     padding:0 10px;
@@ -196,11 +197,11 @@ button{
     height:36px;
 
     border-radius:6px;
-    border:2px solid cyan;
+    border:2px solid #fff36a;
 
-    background:rgba(0,30,60,0.86);
+    background:rgba(60,48,0,0.9);
 
-    color:white;
+    color:#fff36a;
 
     font-size:13px;
     font-weight:bold;
