@@ -421,11 +421,17 @@ button{
 
     position:absolute;
 
-    top:24px;
-    left:-10px;
+    top:18px;
+    left:0;
 
-    width:56px;
-    height:56px;
+    width:52px;
+    height:52px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:0;
 
     border:none;
     border-radius:0;
@@ -434,8 +440,8 @@ button{
 
     color:white;
 
-    font-size:46px;
-    line-height:56px;
+    font-size:42px;
+    line-height:1;
 
     text-shadow:
         0 0 10px cyan,
