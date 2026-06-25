@@ -1905,15 +1905,27 @@ heartItems.forEach(h=>{
     ctx.save();
     ctx.translate(h.x,h.y);
     ctx.scale(1.1,1.1);
+
+    ctx.shadowColor = "gold";
+    ctx.shadowBlur = 26;
+    ctx.fillStyle = "rgba(255,215,0,0.65)";
+
+    ctx.beginPath();
+    ctx.arc(0,0,22,0,Math.PI*2);
+    ctx.fill();
+
+    ctx.shadowColor = "gold";
+    ctx.shadowBlur = 18;
     ctx.fillStyle = "red";
-    ctx.shadowColor = "red";
-    ctx.shadowBlur = 14;
+    ctx.strokeStyle = "gold";
+    ctx.lineWidth = 2;
 
     ctx.beginPath();
     ctx.moveTo(0,10);
     ctx.bezierCurveTo(-24,-8,-12,-24,0,-12);
     ctx.bezierCurveTo(12,-24,24,-8,0,10);
     ctx.fill();
+    ctx.stroke();
 
     ctx.restore();
 
