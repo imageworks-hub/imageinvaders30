@@ -829,7 +829,7 @@ function showCardCaseSavedMessage(){
 
     if(!saveMessage)return;
 
-    saveMessage.textContent = "\u30ab\u30fc\u30c9\u30b1\u30fc\u30b9\u306b\u4fdd\u5b58";
+    saveMessage.textContent = "OK!";
     saveMessage.style.display = "block";
 
 }
@@ -840,7 +840,7 @@ function resetSaveMessage(){
 
     if(!saveMessage)return;
 
-    saveMessage.textContent = "\u9577\u62bc\u3057\u4fdd\u5b58";
+    saveMessage.textContent = "\u30ab\u30fc\u30c9\u30b1\u30fc\u30b9\u306b\u4fdd\u5b58";
 
 }
 
@@ -2306,57 +2306,32 @@ saveBtn.onclick = function(){
 
 };
 
-let cardHoldTimer = null;
-let cardSavedByHold = false;
-
-cardImage.addEventListener("pointerdown", function(){
+function handleCardCaseSaveTap(){
 
     if(!obtainedCard)return;
 
-    cardHoldTimer = setTimeout(function(){
+    saveObtainedCardToCase();
 
-        saveObtainedCardToCase();
-        cardSavedByHold = true;
-        cardHoldTimer = null;
-
-    },700);
-
-});
-
-cardImage.addEventListener("pointerup", function(){
-
-    if(cardHoldTimer){
-
-        clearTimeout(cardHoldTimer);
-        cardHoldTimer = null;
-
-    }
-
-});
-
-cardImage.addEventListener("pointerleave", function(){
-
-    if(cardHoldTimer){
-
-        clearTimeout(cardHoldTimer);
-        cardHoldTimer = null;
-
-    }
-
-});
+}
 
 cardImage.onclick = function(){
 
-    if(cardSavedByHold){
-
-        cardSavedByHold = false;
-        return;
-
-    }
-
-    document.getElementById("saveMessage").style.display = "none";
+    handleCardCaseSaveTap();
 
 };
+
+const saveMessageElement =
+document.getElementById("saveMessage");
+
+if(saveMessageElement){
+
+    saveMessageElement.onclick = function(){
+
+        handleCardCaseSaveTap();
+
+    };
+
+}
 
 function renderCardCase(){
 

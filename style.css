@@ -59,11 +59,21 @@ button{
 
     z-index:300;
 
+    max-width:92vw;
+
+    padding:8px 14px;
+
     color:gold;
 
-    font-size:25px;
+    font-size:24px;
 
     font-weight:bold;
+
+    white-space:nowrap;
+    text-align:center;
+
+    cursor:pointer;
+    pointer-events:auto;
 
     text-shadow:
         0 0 10px cyan,
@@ -71,6 +81,16 @@ button{
         0 0 40px yellow;
 
     animation:saveFlash 1s infinite alternate;
+
+}
+
+@media (max-width:768px){
+
+    #saveMessage{
+
+        font-size:20px;
+
+    }
 
 }
 
