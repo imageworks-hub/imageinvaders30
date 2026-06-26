@@ -1003,3 +1003,257 @@ h1{
     }
 
 }
+/* Card case refinement */
+#cardCaseBtn{
+
+    width:76px;
+    height:76px;
+
+}
+
+@media (max-width:768px){
+
+    #cardCaseBtn{
+
+        width:58px;
+        height:58px;
+
+    }
+
+    #cardCaseCount{
+
+        right:-6px;
+        bottom:-6px;
+
+        min-width:22px;
+        height:22px;
+
+        font-size:12px;
+        line-height:22px;
+
+    }
+
+}
+
+#cardCaseTabs{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:8px;
+
+    max-width:720px;
+
+    margin:0 auto 18px;
+
+}
+
+.cardCaseTab{
+
+    width:auto;
+    height:44px;
+
+    border:2px solid rgba(255,215,0,0.75);
+    border-radius:8px;
+
+    background:rgba(0,0,0,0.55);
+
+    color:white;
+
+    font-size:14px;
+    font-weight:bold;
+
+    box-shadow:
+        0 0 8px rgba(255,215,0,0.55),
+        inset 0 0 10px rgba(255,215,0,0.18);
+
+}
+
+.cardCaseTab.active{
+
+    background:rgba(255,215,0,0.18);
+
+    color:gold;
+
+    text-shadow:
+        0 0 8px gold,
+        0 0 16px orange;
+
+}
+
+.cardCaseCard{
+
+    cursor:pointer;
+
+}
+
+.cardCaseCardName{
+
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    padding:5px 3px;
+
+    background:rgba(0,0,0,0.7);
+
+    color:white;
+
+    font-size:10px;
+    text-align:center;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+}
+
+#cardDetailView{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100vw;
+    height:100vh;
+
+    z-index:3200;
+
+    background:rgba(0,0,0,0.82);
+
+    justify-content:center;
+    align-items:center;
+
+    padding:24px;
+
+    box-sizing:border-box;
+
+}
+
+#cardDetailPanel{
+
+    position:relative;
+
+    width:min(86vw,360px);
+
+    padding:18px;
+
+    border:2px solid gold;
+    border-radius:10px;
+
+    background:#050815;
+
+    box-shadow:
+        0 0 16px gold,
+        0 0 36px rgba(255,140,0,0.65);
+
+    text-align:center;
+
+}
+
+#cardDetailClose{
+
+    position:absolute;
+
+    top:-16px;
+    right:-16px;
+
+    width:42px;
+    height:42px;
+
+    border:2px solid gold;
+    border-radius:50%;
+
+    background:rgba(0,0,0,0.85);
+
+    color:white;
+
+    font-size:24px;
+    line-height:1;
+
+}
+
+#cardDetailImage{
+
+    width:100%;
+
+    max-height:68vh;
+
+    object-fit:contain;
+
+    display:block;
+
+    border-radius:6px;
+
+}
+
+#cardDetailName{
+
+    margin-top:12px;
+
+    color:gold;
+
+    font-size:18px;
+    font-weight:bold;
+
+    text-shadow:
+        0 0 8px gold,
+        0 0 16px orange;
+
+}
+
+#cardDetailStage{
+
+    margin-top:6px;
+
+    color:white;
+
+    font-size:14px;
+
+    text-shadow:
+        0 0 8px cyan,
+        0 0 16px blue;
+
+}
+
+@media (max-width:768px){
+
+    #cardCaseTabs{
+
+        gap:6px;
+
+    }
+
+    .cardCaseTab{
+
+        height:38px;
+
+        font-size:11px;
+
+    }
+
+    .cardCaseCardName{
+
+        font-size:8px;
+
+    }
+
+}
+.cardCaseCard{
+
+    width:100%;
+    height:auto;
+
+    padding:0;
+
+    border-radius:8px;
+
+    font-size:inherit;
+
+}

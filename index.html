@@ -41,7 +41,23 @@ content="width=device-width,initial-scale=1.0,user-scalable=no">
 
     <h2>CARD CASE</h2>
 
+    <div id="cardCaseTabs">
+        <button class="cardCaseTab active" data-stage="1">STAGE 1</button>
+        <button class="cardCaseTab" data-stage="2">STAGE 2</button>
+        <button class="cardCaseTab" data-stage="3">STAGE 3</button>
+        <button class="cardCaseTab" data-stage="4">STAGE 4</button>
+    </div>
+
     <div id="cardCaseGrid"></div>
+
+    <div id="cardDetailView">
+        <div id="cardDetailPanel">
+            <button id="cardDetailClose">&#10005;</button>
+            <img id="cardDetailImage" src="" alt="">
+            <div id="cardDetailName"></div>
+            <div id="cardDetailStage"></div>
+        </div>
+    </div>
 
 </div>
 <div id="stageSelectScreen">

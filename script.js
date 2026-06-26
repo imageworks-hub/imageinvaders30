@@ -70,6 +70,24 @@ document.getElementById("cardCaseGrid");
 const cardCaseClose =
 document.getElementById("cardCaseClose");
 
+const cardCaseTabs =
+document.querySelectorAll(".cardCaseTab");
+
+const cardDetailView =
+document.getElementById("cardDetailView");
+
+const cardDetailClose =
+document.getElementById("cardDetailClose");
+
+const cardDetailImage =
+document.getElementById("cardDetailImage");
+
+const cardDetailName =
+document.getElementById("cardDetailName");
+
+const cardDetailStage =
+document.getElementById("cardDetailStage");
+
 const stage4CommentBox =
 document.getElementById("stage4CommentBox");
 
@@ -2333,11 +2351,47 @@ if(saveMessageElement){
 
 }
 
+let activeCardCaseStage = 1;
+
+function getSavedCardStage(card){
+
+    if(card.stage)return Number(card.stage);
+
+    const id = card.id || card.image || "";
+    const match = id.match(/^st([2-4])card/i);
+
+    if(match)return Number(match[1]);
+
+    return 1;
+
+}
+function openCardDetail(card){
+
+    if(!cardDetailView)return;
+
+    cardDetailImage.src = card.image;
+    cardDetailImage.alt = card.name;
+    cardDetailName.textContent = card.name;
+    cardDetailStage.textContent = "STAGE " + getSavedCardStage(card);
+
+    cardDetailView.style.display = "flex";
+
+}
+
+function closeCardDetail(){
+
+    if(!cardDetailView)return;
+
+    cardDetailView.style.display = "none";
+
+}
+
 function renderCardCase(){
 
     if(!cardCaseGrid)return;
 
-    const ownedCards = getOwnedCards();
+    const ownedCards = getOwnedCards()
+    .filter(card=>getSavedCardStage(card) === activeCardCaseStage);
 
     cardCaseGrid.innerHTML = "";
 
@@ -2345,7 +2399,7 @@ function renderCardCase(){
 
         const empty = document.createElement("div");
         empty.className = "cardCaseEmpty";
-        empty.textContent = "NO CARDS";
+        empty.textContent = "NO STAGE " + activeCardCaseStage + " CARDS";
         cardCaseGrid.appendChild(empty);
         return;
 
@@ -2353,14 +2407,26 @@ function renderCardCase(){
 
     ownedCards.forEach(card=>{
 
-        const cardBox = document.createElement("div");
+        const cardBox = document.createElement("button");
         cardBox.className = "cardCaseCard";
+        cardBox.type = "button";
 
         const img = document.createElement("img");
         img.src = card.image;
         img.alt = card.name;
 
+        const name = document.createElement("div");
+        name.className = "cardCaseCardName";
+        name.textContent = card.name;
+
         cardBox.appendChild(img);
+        cardBox.appendChild(name);
+        cardBox.onclick = function(){
+
+            openCardDetail(card);
+
+        };
+
         cardCaseGrid.appendChild(cardBox);
 
     });
@@ -2381,6 +2447,42 @@ function closeCardCase(){
     if(!cardCaseScreen)return;
 
     cardCaseScreen.style.display = "none";
+    closeCardDetail();
+
+}
+
+cardCaseTabs.forEach(tab=>{
+
+    tab.onclick = function(){
+
+        activeCardCaseStage = Number(tab.dataset.stage);
+
+        cardCaseTabs.forEach(t=>t.classList.remove("active"));
+        tab.classList.add("active");
+
+        renderCardCase();
+
+    };
+
+});
+
+if(cardDetailClose){
+
+    cardDetailClose.onclick = closeCardDetail;
+
+}
+
+if(cardDetailView){
+
+    cardDetailView.onclick = function(e){
+
+        if(e.target === cardDetailView){
+
+            closeCardDetail();
+
+        }
+
+    };
 
 }
 
