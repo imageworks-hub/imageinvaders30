@@ -55,6 +55,12 @@ document.getElementById("saveBtn");
 
 const cardImage = document.getElementById("cardImage");
 
+const cardCaseBtn =
+document.getElementById("cardCaseBtn");
+
+const cardCaseCount =
+document.getElementById("cardCaseCount");
+
 const stage4CommentBox =
 document.getElementById("stage4CommentBox");
 
@@ -749,6 +755,85 @@ function getStageCards(){
     return stage1Cards;
 
 }
+const ownedCardsKey = "imageInvadersOwnedCards";
+
+function getOwnedCards(){
+
+    try{
+
+        return JSON.parse(localStorage.getItem(ownedCardsKey)) || [];
+
+    }catch(e){
+
+        return [];
+
+    }
+
+}
+
+function updateCardCaseCount(){
+
+    if(!cardCaseCount)return;
+
+    cardCaseCount.textContent = getOwnedCards().length;
+
+}
+
+function saveOwnedCard(card){
+
+    if(!card)return false;
+
+    const ownedCards = getOwnedCards();
+    const cardId = card.image.replace(".png","");
+
+    const alreadyOwned = ownedCards.some(c=>c.id === cardId);
+
+    if(alreadyOwned){
+
+        updateCardCaseCount();
+        return false;
+
+    }
+
+    ownedCards.push({
+        id:cardId,
+        name:card.name,
+        image:card.image,
+        stage:currentStage,
+        obtainedAt:Date.now()
+    });
+
+    localStorage.setItem(
+        ownedCardsKey,
+        JSON.stringify(ownedCards)
+    );
+
+    updateCardCaseCount();
+
+    return true;
+
+}
+
+function showCardCaseSavedMessage(){
+
+    const saveMessage = document.getElementById("saveMessage");
+
+    if(!saveMessage)return;
+
+    saveMessage.textContent = "\u30ab\u30fc\u30c9\u30b1\u30fc\u30b9\u306b\u4fdd\u5b58";
+    saveMessage.style.display = "block";
+
+}
+
+function resetSaveMessage(){
+
+    const saveMessage = document.getElementById("saveMessage");
+
+    if(!saveMessage)return;
+
+    saveMessage.textContent = "\u9577\u62bc\u3057\u4fdd\u5b58";
+
+}
 
 /////////////////////////////////////////////////
 // スコア
@@ -959,6 +1044,7 @@ function triggerClear(){
     availableCards[Math.floor(Math.random()*availableCards.length)];
 
     cardImage.src = obtainedCard.image;
+    resetSaveMessage();
 
     setTimeout(function(){
 
@@ -1395,6 +1481,7 @@ obtainedCard =
 availableCards[Math.floor(Math.random()*availableCards.length)];
 
 cardImage.src = obtainedCard.image;
+    resetSaveMessage();
 
 setTimeout(function(){
 
@@ -2185,9 +2272,20 @@ document.addEventListener("keyup", function(e){
 
 });
 
+function saveObtainedCardToCase(){
+
+    if(!obtainedCard)return;
+
+    saveOwnedCard(obtainedCard);
+    showCardCaseSavedMessage();
+
+}
+
 saveBtn.onclick = function(){
 
     if(!obtainedCard)return;
+
+    saveObtainedCardToCase();
 
     const link = document.createElement("a");
 
@@ -2199,11 +2297,69 @@ saveBtn.onclick = function(){
 
 };
 
+let cardHoldTimer = null;
+let cardSavedByHold = false;
+
+cardImage.addEventListener("pointerdown", function(){
+
+    if(!obtainedCard)return;
+
+    cardHoldTimer = setTimeout(function(){
+
+        saveObtainedCardToCase();
+        cardSavedByHold = true;
+        cardHoldTimer = null;
+
+    },700);
+
+});
+
+cardImage.addEventListener("pointerup", function(){
+
+    if(cardHoldTimer){
+
+        clearTimeout(cardHoldTimer);
+        cardHoldTimer = null;
+
+    }
+
+});
+
+cardImage.addEventListener("pointerleave", function(){
+
+    if(cardHoldTimer){
+
+        clearTimeout(cardHoldTimer);
+        cardHoldTimer = null;
+
+    }
+
+});
+
 cardImage.onclick = function(){
+
+    if(cardSavedByHold){
+
+        cardSavedByHold = false;
+        return;
+
+    }
 
     document.getElementById("saveMessage").style.display = "none";
 
 };
+
+if(cardCaseBtn){
+
+    cardCaseBtn.onclick = function(){
+
+        alert("CARD CASE: " + getOwnedCards().length + " cards");
+
+    };
+
+}
+
+updateCardCaseCount();
 
 const stage1Btn =
 document.getElementById("stage1Btn");
