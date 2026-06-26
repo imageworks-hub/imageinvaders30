@@ -61,6 +61,15 @@ document.getElementById("cardCaseBtn");
 const cardCaseCount =
 document.getElementById("cardCaseCount");
 
+const cardCaseScreen =
+document.getElementById("cardCaseScreen");
+
+const cardCaseGrid =
+document.getElementById("cardCaseGrid");
+
+const cardCaseClose =
+document.getElementById("cardCaseClose");
+
 const stage4CommentBox =
 document.getElementById("stage4CommentBox");
 
@@ -2349,13 +2358,78 @@ cardImage.onclick = function(){
 
 };
 
+function renderCardCase(){
+
+    if(!cardCaseGrid)return;
+
+    const ownedCards = getOwnedCards();
+
+    cardCaseGrid.innerHTML = "";
+
+    if(ownedCards.length === 0){
+
+        const empty = document.createElement("div");
+        empty.className = "cardCaseEmpty";
+        empty.textContent = "NO CARDS";
+        cardCaseGrid.appendChild(empty);
+        return;
+
+    }
+
+    ownedCards.forEach(card=>{
+
+        const cardBox = document.createElement("div");
+        cardBox.className = "cardCaseCard";
+
+        const img = document.createElement("img");
+        img.src = card.image;
+        img.alt = card.name;
+
+        cardBox.appendChild(img);
+        cardCaseGrid.appendChild(cardBox);
+
+    });
+
+}
+
+function openCardCase(){
+
+    if(!cardCaseScreen)return;
+
+    renderCardCase();
+    cardCaseScreen.style.display = "block";
+
+}
+
+function closeCardCase(){
+
+    if(!cardCaseScreen)return;
+
+    cardCaseScreen.style.display = "none";
+
+}
+
 if(cardCaseBtn){
 
-    cardCaseBtn.onclick = function(){
+    cardCaseBtn.onclick = function(e){
 
-        alert("CARD CASE: " + getOwnedCards().length + " cards");
+        if(e)e.preventDefault();
+        openCardCase();
 
     };
+
+    cardCaseBtn.addEventListener("touchend", function(e){
+
+        e.preventDefault();
+        openCardCase();
+
+    });
+
+}
+
+if(cardCaseClose){
+
+    cardCaseClose.onclick = closeCardCase;
 
 }
 
