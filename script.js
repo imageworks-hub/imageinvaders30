@@ -82,9 +82,6 @@ document.getElementById("cardDetailClose");
 const cardDetailImage =
 document.getElementById("cardDetailImage");
 
-const cardDetailName =
-document.getElementById("cardDetailName");
-
 const cardDetailStage =
 document.getElementById("cardDetailStage");
 
@@ -2370,8 +2367,7 @@ function openCardDetail(card){
     if(!cardDetailView)return;
 
     cardDetailImage.src = card.image;
-    cardDetailImage.alt = card.name;
-    cardDetailName.textContent = card.name;
+    cardDetailImage.alt = "CARD";
     cardDetailStage.textContent = "STAGE " + getSavedCardStage(card);
 
     cardDetailView.style.display = "flex";
@@ -2413,14 +2409,8 @@ function renderCardCase(){
 
         const img = document.createElement("img");
         img.src = card.image;
-        img.alt = card.name;
-
-        const name = document.createElement("div");
-        name.className = "cardCaseCardName";
-        name.textContent = card.name;
-
-        cardBox.appendChild(img);
-        cardBox.appendChild(name);
+        img.alt = "CARD";
+cardBox.appendChild(img);
         cardBox.onclick = function(){
 
             openCardDetail(card);

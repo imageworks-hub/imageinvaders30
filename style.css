@@ -1088,29 +1088,6 @@ h1{
 
 }
 
-.cardCaseCardName{
-
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    padding:5px 3px;
-
-    background:rgba(0,0,0,0.7);
-
-    color:white;
-
-    font-size:10px;
-    text-align:center;
-
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-
-}
-
 #cardDetailView{
 
     display:none;
@@ -1193,21 +1170,6 @@ h1{
 
 }
 
-#cardDetailName{
-
-    margin-top:12px;
-
-    color:gold;
-
-    font-size:18px;
-    font-weight:bold;
-
-    text-shadow:
-        0 0 8px gold,
-        0 0 16px orange;
-
-}
-
 #cardDetailStage{
 
     margin-top:6px;
@@ -1238,13 +1200,7 @@ h1{
 
     }
 
-    .cardCaseCardName{
-
-        font-size:8px;
-
     }
-
-}
 .cardCaseCard{
 
     width:100%;
