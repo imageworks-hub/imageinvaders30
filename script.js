@@ -275,6 +275,10 @@ const team4Image = new Image();
 
 team4Image.src = "team4.png";
 
+const item1Image = new Image();
+
+item1Image.src = "item1.png";
+
 const playerImage = new Image();
 
 playerImage.src = "player.png";
@@ -432,6 +436,29 @@ let moveUp = false;
 let moveDown = false;
 
 let bullets=[];
+
+let tripleShotEnabled = false;
+
+function firePlayerBullets(){
+
+    if(playerEntering)return;
+
+    const shotX = player.x;
+    const shotY = player.y - player.size + 10;
+    const shotDirections = tripleShotEnabled ? [-3.4,0,3.4] : [0];
+
+    shotDirections.forEach(dx=>{
+
+        bullets.push({
+            x:shotX,
+            y:shotY,
+            dx:dx,
+            dy:-9.4
+        });
+
+    });
+
+}
 
 let enemyBullets=[];
 let bossBullets=[];
@@ -945,7 +972,8 @@ for(let r=0;r<6;r++){
             x: canvas.width*(c+1)/8,
             y: canvas.height*0.1+r*50,
             alive: true,
-            hasHeart: false
+            hasHeart: false,
+            hasItem1: false
         });
 
     }
@@ -953,6 +981,7 @@ for(let r=0;r<6;r++){
 
 let enemyDir = 0.5;
 let heartItems = [];
+let item1Drops = [];
 
 
 
@@ -1015,6 +1044,26 @@ function applyStage(stageNumber){
     backgroundImage.src = setting.background;
     enemyImage.src = setting.enemy;
 
+    tripleShotEnabled = false;
+    item1Drops = [];
+    heartItems = [];
+
+    enemies.forEach(e=>{
+        e.hasHeart = false;
+        e.hasItem1 = false;
+    });
+
+    if(stageNumber === 3){
+
+        const itemEnemy =
+        enemies[Math.floor(Math.random()*enemies.length)];
+
+        if(itemEnemy){
+            itemEnemy.hasItem1 = true;
+        }
+
+    }
+
     if(setting.boss){
     bossImage.src = setting.boss;
 }
@@ -1032,11 +1081,6 @@ function applyStage(stageNumber){
         team4.jitter = 0;
         team4ShotTimer = 0;
         team4Bullets = [];
-        heartItems = [];
-
-        enemies.forEach(e=>{
-            e.hasHeart = false;
-        });
 
         const heartEnemy =
         enemies[Math.floor(Math.random()*enemies.length)];
@@ -1140,14 +1184,7 @@ canvas.addEventListener("touchstart",(e)=>{
 
 }
 
-    if(playerEntering){
-        return;
-    }
-
-    bullets.push({
-    x: player.x,
-    y: player.y - player.size + 10
-});
+    firePlayerBullets();
 
 });
 
@@ -1247,10 +1284,15 @@ if(player.y > canvas.height - 20){
 }
 
     bullets.forEach(b => {
-    b.y -= 10;
+    b.x += b.dx || 0;
+    b.y += typeof b.dy === "number" ? b.dy : -10;
 });
 
-bullets = bullets.filter(b => b.y > -20);
+bullets = bullets.filter(b =>
+    b.y > -20 &&
+    b.x > -20 &&
+    b.x < canvas.width + 20
+);
 enemyBullets.forEach(b=>{
 
     b.y += 5;
@@ -1473,6 +1515,17 @@ if(currentStage === 4 && !clearFlag){
                     });
 
                     e.hasHeart = false;
+
+                }
+
+                if(currentStage === 3 && e.hasItem1){
+
+                    item1Drops.push({
+                        x:e.x,
+                        y:e.y
+                    });
+
+                    e.hasItem1 = false;
 
                 }
             }
@@ -1813,6 +1866,22 @@ heartItems.forEach(h=>{
 
 heartItems = heartItems.filter(h=>!h.collected);
 
+item1Drops.forEach(item=>{
+
+    if(
+        Math.abs(item.x-player.x)<34 &&
+        Math.abs(item.y-player.y)<34
+    ){
+
+        tripleShotEnabled = true;
+        item.collected = true;
+
+    }
+
+});
+
+item1Drops = item1Drops.filter(item=>!item.collected);
+
     }
 
 
@@ -2047,6 +2116,26 @@ heartItems.forEach(h=>{
 
 });
 
+item1Drops.forEach(item=>{
+
+    if(!item1Image.complete || item1Image.naturalWidth === 0)return;
+
+    ctx.save();
+    ctx.shadowColor = "#6edcff";
+    ctx.shadowBlur = 18;
+
+    ctx.drawImage(
+        item1Image,
+        item.x - 29,
+        item.y - 29,
+        58,
+        58
+    );
+
+    ctx.restore();
+
+});
+
 if(
     damageCooldown <= 0 ||
     Math.floor(damageCooldown / 5) % 2 === 0
@@ -2272,14 +2361,7 @@ document.addEventListener("keydown", function(e){
 
 }else{
 
-    if(playerEntering){
-        return;
-    }
-
-    bullets.push({
-        x:player.x,
-        y:player.y - player.size + 10
-    });
+    firePlayerBullets();
 
 }
 
