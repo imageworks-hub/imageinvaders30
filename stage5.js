@@ -38,6 +38,7 @@ const input = {
     forward:false,
     backward:false,
     touchX:0,
+    touchZ:9,
     touchThrottle:0
 };
 
@@ -47,6 +48,7 @@ const pointer = {
     startX:0,
     startY:0,
     baseX:0,
+    baseZ:9,
     moved:false
 };
 
@@ -393,13 +395,18 @@ function animate(){
     damageCooldown = Math.max(0,damageCooldown-dt);
 
     const horizontal = (input.right?1:0)-(input.left?1:0);
-    const targetX = input.touchX || camera.position.x;
+    const depth = (input.backward?1:0)-(input.forward?1:0);
+    const targetX = input.touchX;
+    const targetZ = input.touchZ;
     camera.position.x += horizontal*8.5*dt;
+    camera.position.z += depth*10*dt;
 
     if(pointer.active){
         camera.position.x += (targetX-camera.position.x)*Math.min(1,dt*8);
+        camera.position.z += (targetZ-camera.position.z)*Math.min(1,dt*8);
     }
     camera.position.x = clamp(camera.position.x,-10.5,10.5);
+    camera.position.z = clamp(camera.position.z,-6,24);
 
     let throttle = 0;
     if(input.forward)throttle += 1;
@@ -410,6 +417,7 @@ function animate(){
 
     camera.position.y = 1.7 + Math.sin(elapsed*1.8)*0.08;
     camera.rotation.z += ((-horizontal*0.018)-camera.rotation.z)*Math.min(1,dt*5);
+    camera.rotation.x += ((-depth*0.014)-camera.rotation.x)*Math.min(1,dt*5);
 
     updateStars(dt,approachSpeed);
     updateEnemies(dt,approachSpeed);
@@ -461,6 +469,7 @@ async function start(){
     teamShotTimer = 5;
     restartReady = false;
     input.touchX = 0;
+    input.touchZ = 9;
     input.touchThrottle = 0;
     endMessage.style.display = "none";
     layer.style.display = "block";
@@ -519,8 +528,10 @@ canvas.addEventListener("pointerdown",event=>{
     pointer.startX = event.clientX;
     pointer.startY = event.clientY;
     pointer.baseX = camera.position.x;
+    pointer.baseZ = camera.position.z;
     pointer.moved = false;
     input.touchX = camera.position.x;
+    input.touchZ = camera.position.z;
     canvas.setPointerCapture?.(event.pointerId);
 });
 
@@ -533,6 +544,7 @@ canvas.addEventListener("pointermove",event=>{
     const dy = event.clientY-pointer.startY;
     pointer.moved = pointer.moved || Math.hypot(dx,dy)>12;
     input.touchX = clamp(pointer.baseX+(dx/window.innerWidth)*22,-10.5,10.5);
+    input.touchZ = clamp(pointer.baseZ+(dy/window.innerHeight)*24,-6,24);
     input.touchThrottle = clamp((-dy/window.innerHeight)*3,-1,1);
 });
 
@@ -542,6 +554,8 @@ function finishPointer(event){
     if(!pointer.active || event.pointerId !== pointer.id)return;
 
     if(!pointer.moved)fire();
+    camera.position.x = input.touchX;
+    camera.position.z = input.touchZ;
     pointer.active = false;
     input.touchThrottle = 0;
 }
