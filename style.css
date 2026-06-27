@@ -363,7 +363,7 @@ button{
 
 }
 
-/* スマ�E */
+/* 繧ｹ繝槭・ */
 @media (max-width:768px){
 
     #shopBtn{
@@ -674,7 +674,7 @@ button{
 
 }
 
-/* スマ�E用 */
+/* 繧ｹ繝槭・逕ｨ */
 @media (max-width:768px){
 
     #shopScreen h2{
@@ -1212,4 +1212,43 @@ h1{
 
     font-size:inherit;
 
+}
+/* Title item shop icon */
+#shopBtn{
+    position:absolute;
+    top:auto;
+    right:18px;
+    bottom:108px;
+    left:auto;
+    width:76px;
+    height:76px;
+    padding:0;
+    border:0;
+    border-radius:0;
+    transform:none;
+    background:transparent;
+    cursor:pointer;
+    touch-action:manipulation;
+    user-select:none;
+    filter:
+        drop-shadow(0 0 7px white)
+        drop-shadow(0 0 17px #b9c8d8);
+    z-index:1200;
+}
+
+#itemShopImage{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+@media (max-width:768px){
+    #shopBtn{
+        right:12px;
+        bottom:104px;
+        width:58px;
+        height:58px;
+        transform:none;
+    }
 }
