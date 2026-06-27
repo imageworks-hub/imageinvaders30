@@ -1252,3 +1252,188 @@ h1{
         transform:none;
     }
 }
+
+/* Stage 5 3D */
+#stage5Layer{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:50;
+    overflow:hidden;
+    background:#07193b url("background5.png") center center / cover no-repeat;
+    touch-action:none;
+}
+
+#stage5Canvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    background:transparent;
+    touch-action:none;
+}
+
+#stage5Hud{
+    position:absolute;
+    top:max(18px,env(safe-area-inset-top));
+    left:max(20px,env(safe-area-inset-left));
+    z-index:2;
+    color:white;
+    font:24px monospace;
+    line-height:1.5;
+    text-shadow:0 0 8px #001a4d,0 0 14px #4fdcff;
+    pointer-events:none;
+}
+
+#stage5BossHp{
+    color:#ffb000;
+}
+
+#stage5Lives{
+    position:absolute;
+    top:max(22px,env(safe-area-inset-top));
+    right:max(20px,env(safe-area-inset-right));
+    z-index:2;
+    color:#ff263c;
+    font:34px monospace;
+    text-shadow:0 0 8px #ff263c,0 0 16px rgba(255,255,255,0.8);
+    pointer-events:none;
+}
+
+#stage5Barrier{
+    position:absolute;
+    top:82px;
+    right:max(20px,env(safe-area-inset-right));
+    z-index:2;
+    color:#8eeaff;
+    font:bold 14px monospace;
+    text-shadow:0 0 8px cyan,0 0 16px #246dff;
+    pointer-events:none;
+}
+
+#stage5Reticle{
+    position:absolute;
+    top:45%;
+    left:50%;
+    width:32px;
+    height:32px;
+    transform:translate(-50%,-50%);
+    border:2px solid rgba(126,232,255,0.9);
+    border-radius:50%;
+    box-shadow:0 0 10px cyan,inset 0 0 8px rgba(126,232,255,0.5);
+    pointer-events:none;
+}
+
+#stage5Reticle::before,
+#stage5Reticle::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:50%;
+    background:#bff6ff;
+    box-shadow:0 0 8px cyan;
+    transform:translate(-50%,-50%);
+}
+
+#stage5Reticle::before{
+    width:46px;
+    height:2px;
+}
+
+#stage5Reticle::after{
+    width:2px;
+    height:46px;
+}
+
+#stage5EndMessage{
+    display:none;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:3;
+    color:#ff3047;
+    font:bold 58px sans-serif;
+    white-space:nowrap;
+    text-shadow:0 0 12px red,0 0 28px rgba(255,255,255,0.9);
+    pointer-events:none;
+}
+
+#stage5Layer.stage5-damaged::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:4;
+    box-shadow:inset 0 0 90px 34px rgba(255,0,0,0.75);
+    pointer-events:none;
+}
+
+#stageSelectScreen{
+    overflow-y:auto;
+    box-sizing:border-box;
+    padding:20px 0;
+}
+
+#stageSelectScreen h2{
+    margin:0 0 16px;
+}
+
+.stageBtn{
+    height:72px;
+    margin:9px;
+}
+
+#cardCaseTabs{
+    grid-template-columns:repeat(5,1fr);
+}
+
+@media (max-width:768px){
+    #stage5Hud{
+        top:max(10px,env(safe-area-inset-top));
+        left:max(12px,env(safe-area-inset-left));
+        font-size:17px;
+    }
+
+    #stage5Lives{
+        top:max(12px,env(safe-area-inset-top));
+        right:max(12px,env(safe-area-inset-right));
+        font-size:25px;
+    }
+
+    #stage5Barrier{
+        top:58px;
+        right:max(12px,env(safe-area-inset-right));
+        font-size:11px;
+    }
+
+    #stage5EndMessage{
+        font-size:40px;
+    }
+
+    #stageSelectScreen{
+        justify-content:flex-start;
+        padding-top:58px;
+    }
+
+    #stageSelectScreen h2{
+        margin-bottom:12px;
+        font-size:28px;
+    }
+
+    .stageBtn{
+        width:70vw;
+        height:62px;
+        margin:7px;
+        font-size:24px;
+    }
+
+    #cardCaseTabs{
+        grid-template-columns:repeat(5,1fr);
+        gap:4px;
+    }
+
+    .cardCaseTab{
+        padding:0 2px;
+        font-size:9px;
+    }
+}

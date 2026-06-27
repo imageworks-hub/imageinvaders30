@@ -783,7 +783,32 @@ const stage4Cards = [
 
 ];
 
+const stage5Cards = [
+
+{
+    name:"STAGE5 CARD 1",
+    image:"st5card1.png"
+},
+
+{
+    name:"STAGE5 CARD 2",
+    image:"st5card2.png"
+},
+
+{
+    name:"STAGE5 CARD 3",
+    image:"st5card3.png"
+}
+
+];
+
 function getStageCards(){
+
+    if(currentStage === 5){
+
+        return stage5Cards;
+
+    }
 
     if(currentStage === 4){
 
@@ -933,6 +958,16 @@ const stageSettings = {
         background:"background4.png",
         enemy:"enemy4.png",
         team:"team4.png",
+        bossHp:100,
+        bossSpeed:4,
+        enemyDir:0.8,
+        bossBulletCount1:10,
+        bossBulletCount2:16
+    },
+    5:{
+        background:"background5.png",
+        enemy:"enemy5.png",
+        team:"team5.png",
         bossHp:100,
         bossSpeed:4,
         enemyDir:0.8,
@@ -1143,6 +1178,44 @@ function triggerClear(){
     }
 
 }
+
+window.stage5Bridge = {
+
+    getBarrier:function(){
+        return barrierCount;
+    },
+
+    takeDamage:function(){
+
+        if(barrierCount > 0){
+            barrierCount--;
+            localStorage.setItem("barrier",barrierCount);
+
+            if(barrierCount <= 0){
+                localStorage.removeItem("barrier");
+            }
+        }else{
+            lives--;
+        }
+
+        return lives;
+    },
+
+    clear:function(finalScore){
+        score = finalScore;
+        boss.hp = 0;
+        gameStarted = false;
+        triggerClear();
+        clearBgOverlay.style.display = "block";
+    },
+
+    gameOver:function(finalScore){
+        score = finalScore;
+        lives = 0;
+        gameOver = true;
+    }
+
+};
 
 function damageBossByComment(){
 
@@ -2321,8 +2394,10 @@ ctx.fillText(
 
 function loop(){
 
-    update();
-    draw();
+    if(currentStage !== 5){
+        update();
+        draw();
+    }
 
     requestAnimationFrame(loop);
 
@@ -2333,6 +2408,8 @@ loop();
 
 
 document.addEventListener("keydown", function(e){
+
+    if(currentStage === 5)return;
 
     if(document.activeElement === stage4CommentInput){
         return;
@@ -2370,6 +2447,8 @@ document.addEventListener("keydown", function(e){
 });
 
 document.addEventListener("keyup", function(e){
+
+    if(currentStage === 5)return;
 
     if(e.key === "ArrowLeft") moveLeft = false;
     if(e.key === "ArrowRight") moveRight = false;
@@ -2437,7 +2516,7 @@ function getSavedCardStage(card){
     if(card.stage)return Number(card.stage);
 
     const id = card.id || card.image || "";
-    const match = id.match(/^st([2-4])card/i);
+    const match = id.match(/^st([2-5])card/i);
 
     if(match)return Number(match[1]);
 
@@ -2596,6 +2675,9 @@ document.getElementById("stage3Btn");
 const stage4Btn =
 document.getElementById("stage4Btn");
 
+const stage5Btn =
+document.getElementById("stage5Btn");
+
 const stageBackBtn =
 document.getElementById("stageBackBtn");
 
@@ -2626,6 +2708,13 @@ stage3Btn.onclick = function(){
 stage4Btn.onclick = function(){
 
     applyStage(4);
+    startGame();
+
+};
+
+stage5Btn.onclick = function(){
+
+    applyStage(5);
     startGame();
 
 };
@@ -2663,6 +2752,24 @@ function startGame(){
     Number(
         localStorage.getItem("barrier")
     ) || 0;
+    if(currentStage === 5){
+
+        canvas.style.display = "none";
+        playerEntering = false;
+
+        const launchStage5 = function(){
+            window.stage5Game.start();
+        };
+
+        if(window.stage5Game){
+            launchStage5();
+        }else{
+            window.addEventListener("stage5-ready",launchStage5,{once:true});
+        }
+
+    }else{
+        canvas.style.display = "block";
+    }
 
 }
 

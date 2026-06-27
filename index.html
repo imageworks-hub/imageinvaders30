@@ -44,6 +44,7 @@ content="width=device-width,initial-scale=1.0,user-scalable=no">
         <button class="cardCaseTab" data-stage="2">STAGE 2</button>
         <button class="cardCaseTab" data-stage="3">STAGE 3</button>
         <button class="cardCaseTab" data-stage="4">STAGE 4</button>
+        <button class="cardCaseTab" data-stage="5">STAGE 5</button>
     </div>
 
     <div id="cardCaseGrid"></div>
@@ -83,6 +84,11 @@ content="width=device-width,initial-scale=1.0,user-scalable=no">
         <span class="stageDifficulty">&#11088;&#11088;</span>
     </button>
 
+    <button class="stageBtn" id="stage5Btn">
+        <span class="stageLabel">STAGE 5</span>
+        <span class="stageDifficulty">&#11088;&#11088;&#11088;&#11088;&#11088;</span>
+    </button>
+
 </div>
 
 <div id="shopScreen">
@@ -116,6 +122,18 @@ content="width=device-width,initial-scale=1.0,user-scalable=no">
 
 <canvas id="game"></canvas>
 
+<div id="stage5Layer">
+    <canvas id="stage5Canvas"></canvas>
+    <div id="stage5Hud">
+        <div>SCORE <span id="stage5Score">0</span></div>
+        <div>BOSS <span id="stage5BossHp">100</span></div>
+    </div>
+    <div id="stage5Lives"></div>
+    <div id="stage5Barrier"></div>
+    <div id="stage5Reticle"></div>
+    <div id="stage5EndMessage"></div>
+</div>
+
 <div id="stage4CommentBox">
 
     <div id="stage4CommentLog"></div>
@@ -145,6 +163,7 @@ z-index:200;
 </div>
 
 <script src="script.js"></script>
+<script type="module" src="stage5.js"></script>
 
 </body>
 </html>
