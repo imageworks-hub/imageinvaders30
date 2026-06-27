@@ -71,6 +71,11 @@ function clamp(value,min,max){
     return Math.max(min,Math.min(max,value));
 }
 
+function setPageGestureLock(locked){
+    document.documentElement.classList.toggle("stage5-active",locked);
+    document.body.classList.toggle("stage5-active",locked);
+}
+
 function createSprite(texture,width,height,x,y,z){
     const material = new THREE.SpriteMaterial({
         map:texture,
@@ -237,6 +242,7 @@ function finishClear(){
     if(!running)return;
 
     running = false;
+    setPageGestureLock(false);
     layer.style.display = "none";
     window.stage5Bridge?.clear(score);
 }
@@ -458,6 +464,7 @@ async function start(){
     input.touchThrottle = 0;
     endMessage.style.display = "none";
     layer.style.display = "block";
+    setPageGestureLock(true);
     running = true;
 
     resize();
@@ -468,6 +475,7 @@ async function start(){
 function stop(){
     running = false;
     cancelAnimationFrame(animationId);
+    setPageGestureLock(false);
     layer.style.display = "none";
 }
 
@@ -498,6 +506,8 @@ function handleKeyUp(event){
 }
 
 canvas.addEventListener("pointerdown",event=>{
+    event.preventDefault();
+
     if(restartReady){
         location.reload();
         return;
@@ -515,6 +525,8 @@ canvas.addEventListener("pointerdown",event=>{
 });
 
 canvas.addEventListener("pointermove",event=>{
+    event.preventDefault();
+
     if(!pointer.active || event.pointerId !== pointer.id)return;
 
     const dx = event.clientX-pointer.startX;
@@ -525,6 +537,8 @@ canvas.addEventListener("pointermove",event=>{
 });
 
 function finishPointer(event){
+    event.preventDefault();
+
     if(!pointer.active || event.pointerId !== pointer.id)return;
 
     if(!pointer.moved)fire();
@@ -534,6 +548,19 @@ function finishPointer(event){
 
 canvas.addEventListener("pointerup",finishPointer);
 canvas.addEventListener("pointercancel",finishPointer);
+
+function preventStage5BrowserGesture(event){
+    if(layer.style.display === "block"){
+        event.preventDefault();
+    }
+}
+
+layer.addEventListener("touchstart",preventStage5BrowserGesture,{passive:false});
+layer.addEventListener("touchmove",preventStage5BrowserGesture,{passive:false});
+layer.addEventListener("gesturestart",preventStage5BrowserGesture,{passive:false});
+layer.addEventListener("contextmenu",preventStage5BrowserGesture);
+layer.addEventListener("selectstart",preventStage5BrowserGesture);
+layer.addEventListener("dragstart",preventStage5BrowserGesture);
 window.addEventListener("keydown",handleKeyDown,{passive:false});
 window.addEventListener("keyup",handleKeyUp);
 window.addEventListener("resize",resize);
