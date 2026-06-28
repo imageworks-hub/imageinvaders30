@@ -1460,3 +1460,92 @@ body.stage5-active{
 #stage5Canvas{
     -webkit-user-drag:none;
 }
+/* Clear reward actions */
+#clearRewardPanel{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:190;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:14px;
+    padding:18px;
+    box-sizing:border-box;
+    pointer-events:none;
+}
+
+#cardImage{
+    position:static !important;
+    top:auto !important;
+    left:auto !important;
+    width:auto;
+    height:auto;
+    max-width:min(82vw,420px) !important;
+    max-height:calc(100vh - 190px) !important;
+    transform:none !important;
+    object-fit:contain;
+    filter:drop-shadow(0 0 10px cyan) drop-shadow(0 0 24px rgba(255,215,0,0.7));
+    pointer-events:auto;
+}
+
+#clearActions{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    width:min(88vw,420px);
+    pointer-events:auto;
+}
+
+.clearActionBtn{
+    width:calc(50% - 6px);
+    height:54px;
+    padding:0 12px;
+    border-radius:8px;
+    background:rgba(3,8,24,0.9);
+    color:white;
+    font:bold 17px monospace;
+    letter-spacing:0;
+    cursor:pointer;
+    touch-action:manipulation;
+}
+
+#clearRestartBtn{
+    border:2px solid cyan;
+    box-shadow:0 0 10px cyan,0 0 22px rgba(0,110,255,0.85),inset 0 0 12px rgba(0,220,255,0.2);
+    text-shadow:0 0 8px cyan;
+}
+
+#clearTitleBtn{
+    border:2px solid gold;
+    box-shadow:0 0 10px gold,0 0 22px rgba(255,125,0,0.75),inset 0 0 12px rgba(255,215,0,0.18);
+    text-shadow:0 0 8px gold;
+}
+
+.clearActionBtn:active{
+    transform:scale(0.96);
+}
+
+@media (max-width:768px){
+    #clearRewardPanel{
+        gap:10px;
+        padding:12px;
+    }
+
+    #cardImage{
+        max-width:86vw !important;
+        max-height:calc(100vh - 160px) !important;
+    }
+
+    #clearActions{
+        width:88vw;
+        gap:8px;
+    }
+
+    .clearActionBtn{
+        width:calc(50% - 4px);
+        height:48px;
+        font-size:14px;
+    }
+}

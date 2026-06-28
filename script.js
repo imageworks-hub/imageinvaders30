@@ -55,6 +55,15 @@ document.getElementById("saveBtn");
 
 const cardImage = document.getElementById("cardImage");
 
+const clearRewardPanel =
+document.getElementById("clearRewardPanel");
+
+const clearRestartBtn =
+document.getElementById("clearRestartBtn");
+
+const clearTitleBtn =
+document.getElementById("clearTitleBtn");
+
 const cardCaseBtn =
 document.getElementById("cardCaseBtn");
 
@@ -1214,6 +1223,7 @@ function triggerClear(){
         saveBtn.style.display = "block";
         document.getElementById("saveMessage").style.display = "block";
         cardImage.style.display = "block";
+        clearRewardPanel.style.display = "flex";
 
     },2000);
 
@@ -1698,6 +1708,7 @@ setTimeout(function(){
     saveBtn.style.display = "block";
     document.getElementById("saveMessage").style.display = "block";
     cardImage.style.display = "block";
+    clearRewardPanel.style.display = "flex";
 
 },2000);
 
@@ -2870,3 +2881,49 @@ buyBtn.onclick = function(){
     "https://buy.stripe.com/test_7sY6oA3Gh6SK3pA1IwbII00";
 
 };
+
+
+const clearRestartStageKey = "imageInvadersRestartStage";
+
+if(clearRestartBtn){
+
+    clearRestartBtn.onclick = function(){
+
+        if(!clearFlag)return;
+
+        sessionStorage.setItem(
+            clearRestartStageKey,
+            String(currentStage)
+        );
+
+        location.reload();
+
+    };
+
+}
+
+if(clearTitleBtn){
+
+    clearTitleBtn.onclick = function(){
+
+        sessionStorage.removeItem(clearRestartStageKey);
+        location.href = "./index.html";
+
+    };
+
+}
+
+const clearRestartStage =
+Number(sessionStorage.getItem(clearRestartStageKey));
+
+if(clearRestartStage >= 1 && clearRestartStage <= 5){
+
+    sessionStorage.removeItem(clearRestartStageKey);
+
+    titleScreen.style.display = "none";
+    stageSelectScreen.style.display = "none";
+
+    applyStage(clearRestartStage);
+    startGame();
+
+}
