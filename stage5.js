@@ -68,6 +68,28 @@ const texturePromise = Promise.all([
 const projectileGeometry = new THREE.SphereGeometry(0.2,8,8);
 const playerBulletMaterial = new THREE.MeshBasicMaterial({color:0x7ee8ff});
 const enemyBulletMaterial = new THREE.MeshBasicMaterial({color:0xff9d20});
+const fireballCoreMaterial = new THREE.MeshBasicMaterial({color:0xfff06a});
+const fireballOuterMaterial = new THREE.MeshBasicMaterial({
+    color:0xff5a00,
+    transparent:true,
+    opacity:0.72,
+    blending:THREE.AdditiveBlending,
+    depthWrite:false
+});
+const fireballTrailMaterial = new THREE.MeshBasicMaterial({
+    color:0xff2400,
+    transparent:true,
+    opacity:0.48,
+    blending:THREE.AdditiveBlending,
+    depthWrite:false
+});
+const sharedProjectileMaterials = new Set([
+    playerBulletMaterial,
+    enemyBulletMaterial,
+    fireballCoreMaterial,
+    fireballOuterMaterial,
+    fireballTrailMaterial
+]);
 
 function clamp(value,min,max){
     return Math.max(min,Math.min(max,value));
@@ -144,7 +166,7 @@ function disposeScene(){
         if(object.material && object.material.map){
             object.material.dispose();
         }
-        if(object.material && object.material !== playerBulletMaterial && object.material !== enemyBulletMaterial){
+        if(object.material && !sharedProjectileMaterials.has(object.material)){
             object.material.dispose();
         }
         if(object.geometry && object.geometry !== projectileGeometry){
@@ -173,12 +195,44 @@ function updateHud(){
     barrierValue.textContent = barrier > 0 ? "BARRIER " + barrier : "";
 }
 
-function createProjectile(material,x,y,z,vx,vy,vz){
-    const mesh = new THREE.Mesh(projectileGeometry,material);
+function createFireball(){
+    const group = new THREE.Group();
+    const core = new THREE.Mesh(projectileGeometry,fireballCoreMaterial);
+    const outer = new THREE.Mesh(projectileGeometry,fireballOuterMaterial);
+
+    core.scale.set(1.35,1.35,1.8);
+    outer.scale.set(2.3,2.3,2.8);
+    group.add(core,outer);
+
+    for(let i=0;i<3;i++){
+        const trail = new THREE.Mesh(projectileGeometry,fireballTrailMaterial);
+        const scale = 1.45-i*0.3;
+        trail.position.z = -0.45-i*0.38;
+        trail.scale.set(scale,scale,1.8-i*0.3);
+        group.add(trail);
+    }
+
+    return group;
+}
+
+function createProjectile(material,x,y,z,vx,vy,vz,style="normal"){
+    const mesh = style === "fireball"
+        ? createFireball()
+        : new THREE.Mesh(projectileGeometry,material);
     mesh.position.set(x,y,z);
-    mesh.scale.set(1,1,2.8);
+
+    if(style !== "fireball"){
+        mesh.scale.set(1,1,2.8);
+    }else{
+        const direction = new THREE.Vector3(vx,vy,vz).normalize();
+        mesh.quaternion.setFromUnitVectors(
+            new THREE.Vector3(0,0,1),
+            direction
+        );
+    }
+
     scene.add(mesh);
-    return {mesh,vx,vy,vz};
+    return {mesh,vx,vy,vz,style,phase:Math.random()*Math.PI*2};
 }
 
 function fire(){
@@ -196,7 +250,7 @@ function fire(){
     ));
 }
 
-function fireAtPlayer(source,speed=17,spread=0){
+function fireAtPlayer(source,speed=17,spread=0,style="normal"){
     const target = new THREE.Vector3(
         camera.position.x + (Math.random()-0.5)*spread,
         camera.position.y + (Math.random()-0.5)*spread*0.3,
@@ -211,7 +265,8 @@ function fireAtPlayer(source,speed=17,spread=0){
         source.z,
         direction.x,
         direction.y,
-        direction.z
+        direction.z,
+        style
     ));
 }
 
@@ -263,6 +318,12 @@ function updatePlayerBullets(dt){
         bullet.mesh.position.x += bullet.vx*dt;
         bullet.mesh.position.y += bullet.vy*dt;
         bullet.mesh.position.z += bullet.vz*dt;
+
+        if(bullet.style === "fireball"){
+            const pulse = 1+Math.sin(elapsed*18+bullet.phase)*0.12;
+            bullet.mesh.scale.setScalar(pulse);
+            bullet.mesh.children[1].rotation.z += dt*4;
+        }
         let consumed = false;
 
         for(const enemy of enemies){
@@ -363,7 +424,12 @@ function updateBossAndTeam(dt){
     bossShotTimer -= dt;
     if(bossShotTimer <= 0){
         bossShotTimer = bossHp <= 50 ? 0.75 : 1.15;
-        fireAtPlayer(bossSprite.position.clone(),13,bossHp <= 50 ? 2.4 : 1.2);
+        fireAtPlayer(
+            bossSprite.position.clone(),
+            13,
+            bossHp <= 50 ? 2.4 : 1.2,
+            "fireball"
+        );
     }
 
     teamShotTimer -= dt;
