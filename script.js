@@ -935,11 +935,52 @@ function getStageCards(){
 }
 const ownedCardsKey = "imageInvadersOwnedCards";
 
+function normalizeOwnedCards(savedCards){
+
+    if(!Array.isArray(savedCards))return [];
+
+    const cardsById = new Map();
+
+    savedCards.forEach(card=>{
+
+        if(!card || !card.image)return;
+
+        const cardId = card.id || card.image.replace(".png","");
+        const savedCount = Math.max(
+            1,
+            Math.floor(Number(card.count) || 1)
+        );
+
+        const existingCard = cardsById.get(cardId);
+
+        if(existingCard){
+
+            existingCard.count += savedCount;
+
+        }else{
+
+            cardsById.set(cardId,{
+                ...card,
+                id:cardId,
+                count:savedCount
+            });
+
+        }
+
+    });
+
+    return Array.from(cardsById.values());
+
+}
+
 function getOwnedCards(){
 
     try{
 
-        return JSON.parse(localStorage.getItem(ownedCardsKey)) || [];
+        const savedCards =
+        JSON.parse(localStorage.getItem(ownedCardsKey)) || [];
+
+        return normalizeOwnedCards(savedCards);
 
     }catch(e){
 
@@ -953,7 +994,12 @@ function updateCardCaseCount(){
 
     if(!cardCaseCount)return;
 
-    cardCaseCount.textContent = getOwnedCards().length;
+    const totalCards = getOwnedCards().reduce(
+        (total,card)=>total + card.count,
+        0
+    );
+
+    cardCaseCount.textContent = totalCards;
 
 }
 
@@ -963,23 +1009,27 @@ function saveOwnedCard(card){
 
     const ownedCards = getOwnedCards();
     const cardId = card.image.replace(".png","");
+    const ownedCard = ownedCards.find(c=>c.id === cardId);
+    const now = Date.now();
 
-    const alreadyOwned = ownedCards.some(c=>c.id === cardId);
+    if(ownedCard){
 
-    if(alreadyOwned){
+        ownedCard.count += 1;
+        ownedCard.lastObtainedAt = now;
 
-        updateCardCaseCount();
-        return false;
+    }else{
+
+        ownedCards.push({
+            id:cardId,
+            name:card.name,
+            image:card.image,
+            stage:currentStage,
+            count:1,
+            obtainedAt:now,
+            lastObtainedAt:now
+        });
 
     }
-
-    ownedCards.push({
-        id:cardId,
-        name:card.name,
-        image:card.image,
-        stage:currentStage,
-        obtainedAt:Date.now()
-    });
 
     localStorage.setItem(
         ownedCardsKey,
@@ -991,7 +1041,6 @@ function saveOwnedCard(card){
     return true;
 
 }
-
 function showCardCaseSavedMessage(){
 
     const saveMessage = document.getElementById("saveMessage");
@@ -1081,6 +1130,7 @@ const stageSettings = {
 let canRestart = false;
 
 let obtainedCard = null;
+let obtainedCardSaved = false;
 
 let showSaveMessage = true;
 let saveMessageScale = 0;
@@ -1248,7 +1298,8 @@ function triggerClear(){
     obtainedCard =
     availableCards[Math.floor(Math.random()*availableCards.length)];
 
-    cardImage.src = obtainedCard.image;
+    obtainedCardSaved = false;
+cardImage.src = obtainedCard.image;
     resetSaveMessage();
 
     setTimeout(function(){
@@ -1736,6 +1787,7 @@ bossDamageTimer = 10;
 obtainedCard =
 availableCards[Math.floor(Math.random()*availableCards.length)];
 
+obtainedCardSaved = false;
 cardImage.src = obtainedCard.image;
     resetSaveMessage();
 
@@ -2581,10 +2633,16 @@ document.addEventListener("keyup", function(e){
 
 function saveObtainedCardToCase(){
 
-    if(!obtainedCard)return;
+    if(!obtainedCard || obtainedCardSaved)return false;
 
-    saveOwnedCard(obtainedCard);
-    showCardCaseSavedMessage();
+    const saved = saveOwnedCard(obtainedCard);
+
+    if(saved){
+        obtainedCardSaved = true;
+        showCardCaseSavedMessage();
+    }
+
+    return saved;
 
 }
 
@@ -2665,6 +2723,18 @@ function closeCardDetail(){
 
 }
 
+function formatOwnedCardCount(count){
+
+    const cardCount = Math.max(1,Math.floor(Number(count) || 1));
+
+    if(cardCount <= 20){
+        return String.fromCodePoint(0x245f + cardCount);
+    }
+
+    return "x" + cardCount;
+
+}
+
 function renderCardCase(){
 
     if(!cardCaseGrid)return;
@@ -2694,6 +2764,15 @@ function renderCardCase(){
         img.src = card.image;
         img.alt = "CARD";
 cardBox.appendChild(img);
+
+        if(card.count > 1){
+
+            const countBadge = document.createElement("span");
+            countBadge.className = "cardCaseCardCount";
+            countBadge.textContent = formatOwnedCardCount(card.count);
+            cardBox.appendChild(countBadge);
+
+        }
         cardBox.onclick = function(){
 
             openCardDetail(card);
