@@ -426,7 +426,7 @@ function updateBossAndTeam(dt){
         bossShotTimer = bossHp <= 50 ? 0.75 : 1.15;
         fireAtPlayer(
             bossSprite.position.clone(),
-            13,
+            15,
             bossHp <= 50 ? 2.4 : 1.2,
             "fireball"
         );
