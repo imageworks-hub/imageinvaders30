@@ -1549,3 +1549,51 @@ body.stage5-active{
         font-size:14px;
     }
 }
+/* Player damage feedback */
+#damageFlashOverlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:180;
+    pointer-events:none;
+}
+
+#damageFlashOverlay.damage-flash-red{
+    display:block;
+    animation:damageFlashRed 320ms ease-out forwards;
+}
+
+#damageFlashOverlay.damage-flash-barrier{
+    display:block;
+    animation:damageFlashBarrier 320ms ease-out forwards;
+}
+
+@keyframes damageFlashRed{
+    0%,50%{
+        background:rgba(255,0,0,0.10);
+        box-shadow:inset 0 0 90px 34px rgba(255,0,0,0.82);
+    }
+    25%,75%{
+        background:rgba(255,0,0,0.03);
+        box-shadow:inset 0 0 45px 14px rgba(255,0,0,0.28);
+    }
+    100%{
+        background:transparent;
+        box-shadow:inset 0 0 0 0 transparent;
+    }
+}
+
+@keyframes damageFlashBarrier{
+    0%,50%{
+        background:rgba(102,204,255,0.10);
+        box-shadow:inset 0 0 90px 34px rgba(102,204,255,0.90);
+    }
+    25%,75%{
+        background:rgba(102,204,255,0.03);
+        box-shadow:inset 0 0 45px 14px rgba(102,204,255,0.30);
+    }
+    100%{
+        background:transparent;
+        box-shadow:inset 0 0 0 0 transparent;
+    }
+}

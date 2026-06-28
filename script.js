@@ -55,6 +55,39 @@ document.getElementById("saveBtn");
 
 const cardImage = document.getElementById("cardImage");
 
+const damageFlashOverlay =
+document.getElementById("damageFlashOverlay");
+
+let damageFlashTimeout = null;
+
+function triggerPlayerDamageFlash(barrierBlocked){
+
+    if(!damageFlashOverlay)return;
+
+    clearTimeout(damageFlashTimeout);
+
+    damageFlashOverlay.classList.remove(
+        "damage-flash-red",
+        "damage-flash-barrier"
+    );
+
+    void damageFlashOverlay.offsetWidth;
+
+    damageFlashOverlay.classList.add(
+        barrierBlocked
+            ? "damage-flash-barrier"
+            : "damage-flash-red"
+    );
+
+    damageFlashTimeout = setTimeout(function(){
+        damageFlashOverlay.classList.remove(
+            "damage-flash-red",
+            "damage-flash-barrier"
+        );
+    },340);
+
+}
+
 const clearRewardPanel =
 document.getElementById("clearRewardPanel");
 
@@ -1445,6 +1478,8 @@ enemyBullets.forEach(b=>{
     ){
         if(barrierCount > 0){
 
+    triggerPlayerDamageFlash(true);
+
     barrierCount--;
 
     localStorage.setItem(
@@ -1461,6 +1496,8 @@ enemyBullets.forEach(b=>{
     }
 
 }else{
+
+    triggerPlayerDamageFlash(false);
 
     lives--;
 
@@ -1798,6 +1835,8 @@ bossBullets.forEach(b=>{
     ){
         if(barrierCount > 0){
 
+    triggerPlayerDamageFlash(true);
+
     barrierCount--;
 
     localStorage.setItem(
@@ -1814,6 +1853,8 @@ bossBullets.forEach(b=>{
     }
 
 }else{
+
+    triggerPlayerDamageFlash(false);
 
     lives--;
 
@@ -1847,6 +1888,8 @@ teamBullets.forEach(b=>{
     ){
         if(barrierCount > 0){
 
+    triggerPlayerDamageFlash(true);
+
             barrierCount--;
 
             localStorage.setItem(
@@ -1864,7 +1907,9 @@ teamBullets.forEach(b=>{
 
         }else{
 
-            lives--;
+            triggerPlayerDamageFlash(false);
+
+    lives--;
 
         }
 
@@ -1904,6 +1949,8 @@ team3Bullets.forEach(b=>{
     ){
         if(barrierCount > 0){
 
+    triggerPlayerDamageFlash(true);
+
             barrierCount--;
 
             localStorage.setItem(
@@ -1921,7 +1968,9 @@ team3Bullets.forEach(b=>{
 
         }else{
 
-            lives--;
+            triggerPlayerDamageFlash(false);
+
+    lives--;
 
         }
 
@@ -1954,6 +2003,8 @@ team4Bullets.forEach(b=>{
     ){
         if(barrierCount > 0){
 
+    triggerPlayerDamageFlash(true);
+
             barrierCount--;
 
             localStorage.setItem(
@@ -1971,7 +2022,9 @@ team4Bullets.forEach(b=>{
 
         }else{
 
-            lives--;
+            triggerPlayerDamageFlash(false);
+
+    lives--;
 
         }
 
