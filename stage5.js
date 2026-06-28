@@ -274,9 +274,32 @@ function takeDamage(){
     if(damageCooldown > 0 || !running)return;
 
     damageCooldown = 3;
+
+    const barrierBlocked =
+        window.stage5Bridge &&
+        window.stage5Bridge.getBarrier() > 0;
+
     lives = window.stage5Bridge ? window.stage5Bridge.takeDamage() : lives-1;
-    layer.classList.add("stage5-damaged");
-    setTimeout(()=>layer.classList.remove("stage5-damaged"),260);
+
+    const damageClass = barrierBlocked
+        ? "stage5-barrier-damaged"
+        : "stage5-damaged";
+
+    layer.classList.remove(
+        "stage5-damaged",
+        "stage5-barrier-damaged"
+    );
+
+    void layer.offsetWidth;
+    layer.classList.add(damageClass);
+
+    setTimeout(()=>{
+        layer.classList.remove(
+            "stage5-damaged",
+            "stage5-barrier-damaged"
+        );
+    },260);
+
     updateHud();
 
     if(lives <= 0){
