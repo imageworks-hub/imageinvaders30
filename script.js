@@ -1220,7 +1220,6 @@ function triggerClear(){
 
     setTimeout(function(){
 
-        saveBtn.style.display = "block";
         document.getElementById("saveMessage").style.display = "block";
         cardImage.style.display = "block";
         clearRewardPanel.style.display = "flex";
@@ -1705,7 +1704,6 @@ cardImage.src = obtainedCard.image;
 
 setTimeout(function(){
 
-    saveBtn.style.display = "block";
     document.getElementById("saveMessage").style.display = "block";
     cardImage.style.display = "block";
     clearRewardPanel.style.display = "flex";
