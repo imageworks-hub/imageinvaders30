@@ -976,7 +976,7 @@ function resetSaveMessage(){
 
     if(!saveMessage)return;
 
-    saveMessage.textContent = "\u30ab\u30fc\u30c9\u30b1\u30fc\u30b9\u306b\u4fdd\u5b58";
+    saveMessage.textContent = "\u30bf\u30c3\u30d7\u3057\u3066\u4fdd\u5b58";
 
 }
 
