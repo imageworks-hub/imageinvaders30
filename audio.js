@@ -27,6 +27,7 @@
   let timer = null;
   let step = 0;
   let scene = location.pathname.endsWith("cardbattle.html") ? "cardSelect" : "title";
+  const isBattlePage = location.pathname.endsWith("cardbattle.html");
   let unlocked = false;
   let enabled = localStorage.getItem(STORAGE_KEY) !== "false";
 
@@ -98,7 +99,14 @@
     if(!tracks[nextScene])return;
     if(scene === nextScene && timer)return;
     scene = nextScene;
+    updateToggleVisibility();
     startMusic();
+  }
+
+  function updateToggleVisibility(){
+    const button = document.getElementById("soundToggle");
+    if(!button)return;
+    button.hidden = isBattlePage || (scene !== "title" && scene !== "cardSelect");
   }
 
   function sfx(name){
@@ -155,6 +163,7 @@
     });
     document.body.appendChild(button);
     updateButton();
+    updateToggleVisibility();
   }
 
   document.addEventListener("pointerdown",unlock,{once:true});
