@@ -30,6 +30,7 @@
   const isBattlePage = location.pathname.endsWith("cardbattle.html");
   let unlocked = false;
   let enabled = localStorage.getItem(STORAGE_KEY) !== "false";
+  let toggleManuallyHidden = false;
 
   function ensureAudio(){
     if(context)return;
@@ -106,7 +107,12 @@
   function updateToggleVisibility(){
     const button = document.getElementById("soundToggle");
     if(!button)return;
-    button.hidden = isBattlePage || (scene !== "title" && scene !== "cardSelect");
+    button.hidden = toggleManuallyHidden || isBattlePage || (scene !== "title" && scene !== "cardSelect");
+  }
+
+  function setToggleVisible(visible){
+    toggleManuallyHidden = !visible;
+    updateToggleVisibility();
   }
 
   function sfx(name){
@@ -176,5 +182,5 @@
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded",addButton);
   else addButton();
 
-  window.GameAudio = {unlock,setScene,sfx,toggle};
+  window.GameAudio = {unlock,setScene,sfx,toggle,setToggleVisible};
 })();

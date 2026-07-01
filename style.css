@@ -1995,3 +1995,18 @@ body.stage5-active{
     border-color:#aaa;
     box-shadow:none;
 }
+
+.cardCaseTab{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    line-height:1.05;
+}
+.cardCaseTab small{
+    display:block;
+    margin-top:3px;
+    color:gold;
+    font-size:11px;
+    text-shadow:0 0 7px gold;
+}

@@ -2909,7 +2909,22 @@ function renderCardCase(){
 
     if(!cardCaseGrid)return;
 
-    const ownedCards = getOwnedCards()
+    const allOwnedCards = getOwnedCards();
+
+    cardCaseTabs.forEach(tab=>{
+        const stage = Number(tab.dataset.stage);
+        const stageCardIds = new Set(
+            allOwnedCards
+            .filter(card=>getSavedCardStage(card) === stage)
+            .map(card=>card.id || card.image)
+        );
+
+        tab.innerHTML =
+        "<span>STAGE " + stage + "</span>" +
+        "<small>" + stageCardIds.size + "/15</small>";
+    });
+
+    const ownedCards = allOwnedCards
     .filter(card=>getSavedCardStage(card) === activeCardCaseStage);
 
     cardCaseGrid.innerHTML = "";
@@ -2961,6 +2976,7 @@ function openCardCase(){
 
     renderCardCase();
     cardCaseScreen.style.display = "block";
+    window.GameAudio?.setToggleVisible(false);
 
 }
 
@@ -2969,6 +2985,7 @@ function closeCardCase(){
     if(!cardCaseScreen)return;
 
     cardCaseScreen.style.display = "none";
+    window.GameAudio?.setToggleVisible(true);
     closeCardDetail();
 
 }
