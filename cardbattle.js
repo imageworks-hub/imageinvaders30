@@ -75,12 +75,12 @@ function showScreen(screen){
 function renderDeck(){
   selectedDeck = [];
   deckGrid.innerHTML = "";
-  const ownedTotal = inventory.reduce((sum,item) => sum + (Number(item.count)||1),0);
+  const ownedTotal = inventory.length;
   const emptyDeck = document.getElementById("emptyDeck");
   emptyDeck.hidden = ownedTotal >= DECK_SIZE;
   emptyDeck.textContent = ownedTotal === 0
     ? "カードケースにカードがありません。IMAGE INVADERSでカードを獲得してください。"
-    : `対戦にはカードが5枚必要です。現在は${ownedTotal}枚です。`;
+    : `対戦には異なるカードが5種類必要です。現在は${ownedTotal}種類です。`;
   inventory.sort((a,b) => (a.stage||9)-(b.stage||9) || a.id.localeCompare(b.id,undefined,{numeric:true}));
   inventory.forEach(item => {
     const card = catalogById.get(item.id);
@@ -88,22 +88,19 @@ function renderDeck(){
     button.className = "deckCard";
     button.dataset.id = card.id;
     button.innerHTML = `<img src="${card.image}" alt="STAGE ${card.stage} card"><span class="copyBadge">x${item.count}</span><span class="pickBadge" hidden>0</span>`;
-    button.addEventListener("click",() => toggleDeckCard(card,Number(item.count),button));
+    button.addEventListener("click",() => toggleDeckCard(card,button));
     deckGrid.appendChild(button);
   });
   updateDeckCounter();
 }
 
-function toggleDeckCard(card,ownedCount,button){
+function toggleDeckCard(card,button){
   const chosen = selectedDeck.filter(item => item.id === card.id).length;
-  if(chosen > 0 && (selectedDeck.length === DECK_SIZE || chosen >= ownedCount)){
+  if(chosen > 0){
     const lastIndex = selectedDeck.map(item => item.id).lastIndexOf(card.id);
     selectedDeck.splice(lastIndex,1);
-  }else if(selectedDeck.length < DECK_SIZE && chosen < ownedCount){
-    selectedDeck.push({...card,instance:`${card.id}-${chosen}-${Date.now()}`});
-  }else if(chosen > 0){
-    const lastIndex = selectedDeck.map(item => item.id).lastIndexOf(card.id);
-    selectedDeck.splice(lastIndex,1);
+  }else if(selectedDeck.length < DECK_SIZE){
+    selectedDeck.push({...card,instance:`${card.id}-${Date.now()}`});
   }
   const count = selectedDeck.filter(item => item.id === card.id).length;
   button.classList.toggle("selected",count > 0);
