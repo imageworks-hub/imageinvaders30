@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>IMAGE CARD BATTLE</title>
+<link rel="stylesheet" href="cardbattle.css">
+</head>
+<body>
+<main id="battleApp">
+  <section id="deckScreen" class="screen">
+    <header class="pageHeader">
+      <button id="deckBackBtn" class="iconBtn" aria-label="タイトルへ戻る">&#x2039;</button>
+      <div><h1>IMAGE CARD BATTLE</h1><p>DECK SELECT <span id="selectedCount">0 / 5</span></p></div>
+    </header>
+    <div id="emptyDeck" hidden>カードケースにカードがありません。IMAGE INVADERSでカードを獲得してください。</div>
+    <div id="deckGrid" class="cardGrid"></div>
+    <footer class="deckFooter"><button id="battleStartBtn" class="commandBtn" disabled>BATTLE START</button></footer>
+  </section>
+
+  <section id="gameScreen" class="screen" hidden>
+    <header class="battleHud">
+      <div class="fighter"><strong>YOU</strong><span id="playerHpText">1000 / 1000</span><div class="hpTrack"><i id="playerHpBar"></i></div></div>
+      <div class="roundBadge">TURN <b id="roundText">1 / 5</b></div>
+      <div class="fighter enemy"><strong>RIVAL</strong><span id="enemyHpText">1000 / 1000</span><div class="hpTrack"><i id="enemyHpBar"></i></div></div>
+    </header>
+    <div id="roundMessage" class="roundMessage">カードを1枚選んでください</div>
+    <div class="arena">
+      <div id="playerSlot" class="battleSlot"><span>YOU</span></div>
+      <div class="versus">VS</div>
+      <div id="enemySlot" class="battleSlot"><span>RIVAL</span></div>
+    </div>
+    <button id="nextRoundBtn" class="commandBtn nextBtn" hidden>NEXT TURN</button>
+    <div id="playerHand" class="battleHand"></div>
+  </section>
+
+  <section id="resultScreen" class="screen resultScreen" hidden>
+    <div class="resultPanel">
+      <p class="resultLabel">BATTLE RESULT</p>
+      <h2 id="resultTitle">YOU WIN</h2>
+      <p id="resultDetail"></p>
+      <div id="rewardChoices" class="rewardChoices"></div>
+      <div id="resultActions" class="resultActions" hidden>
+        <button id="rematchBtn" class="commandBtn">REMATCH</button>
+        <button id="titleBtn" class="commandBtn secondary">TITLE</button>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="cardbattle.js"></script>
+</body>
+</html>

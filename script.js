@@ -145,6 +145,16 @@ if(title2BackBtn){
     title2BackBtn.onclick = closeTitle2;
 }
 
+if(title2StartBtn){
+    title2StartBtn.onclick = function(){
+        location.href = "./cardbattle.html";
+    };
+}
+
+if(location.hash === "#cardbattle"){
+    openTitle2();
+}
+
 document.addEventListener("keydown",function(e){
 
     if(
@@ -2796,24 +2806,46 @@ function handleCardCaseSaveTap(){
 
 }
 
-cardImage.onclick = function(){
+function bindClearCardSave(element){
 
-    handleCardCaseSaveTap();
+    if(!element)return;
 
-};
+    element.style.cursor = "pointer";
+    element.setAttribute("role","button");
+    element.setAttribute("tabindex","0");
+
+    element.addEventListener("pointerup",function(e){
+
+        if(e.pointerType === "mouse"){
+            e.preventDefault();
+            handleCardCaseSaveTap();
+        }
+
+    });
+
+    element.addEventListener("click",function(e){
+
+        e.preventDefault();
+        handleCardCaseSaveTap();
+
+    });
+
+    element.addEventListener("keydown",function(e){
+
+        if(e.key === "Enter" || e.key === " "){
+            e.preventDefault();
+            handleCardCaseSaveTap();
+        }
+
+    });
+
+}
 
 const saveMessageElement =
 document.getElementById("saveMessage");
 
-if(saveMessageElement){
-
-    saveMessageElement.onclick = function(){
-
-        handleCardCaseSaveTap();
-
-    };
-
-}
+bindClearCardSave(cardImage);
+bindClearCardSave(saveMessageElement);
 
 let activeCardCaseStage = 1;
 

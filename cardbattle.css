@@ -1,0 +1,37 @@
+:root{color-scheme:dark;--gold:#ffd65a;--blue:#3ebcff;--purple:#c15cff;--red:#ff3d55;--panel:rgba(5,7,16,.9)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#02030a;color:#fff;font-family:Georgia,"Yu Mincho",serif;overscroll-behavior:none}
+body{min-height:100vh;background-image:url("title2.png");background-size:cover;background-position:center;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:-1}
+button{font:inherit;color:inherit;touch-action:manipulation}
+[hidden]{display:none!important}
+.screen{min-height:100vh;padding:18px 22px 110px}
+.pageHeader{display:flex;align-items:center;gap:18px;max-width:1280px;margin:auto;border-bottom:1px solid #8b691f;padding-bottom:12px}
+.pageHeader h1{margin:0;color:var(--gold);font-size:clamp(24px,4vw,44px);text-shadow:0 0 10px #8c5700;letter-spacing:0}
+.pageHeader p{margin:5px 0 0;color:#d6d9ee}.pageHeader p span{color:var(--gold);font-weight:bold}
+.iconBtn{width:48px;height:48px;border:1px solid #cfa83d;background:#100d08;font-size:42px;line-height:36px;cursor:pointer}
+.cardGrid{max-width:1280px;margin:20px auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:14px}
+.deckCard,.handCard,.rewardCard{position:relative;border:2px solid #685722;background:#090b13;padding:4px;cursor:pointer;box-shadow:0 3px 12px #000}
+.deckCard img,.handCard img,.rewardCard img,.revealedCard img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover}
+.deckCard.selected{border-color:var(--purple);box-shadow:0 0 14px var(--purple)}
+.copyBadge,.pickBadge{position:absolute;right:7px;bottom:7px;min-width:29px;height:29px;padding:4px;border-radius:50%;display:grid;place-items:center;background:#080812;border:1px solid var(--gold);color:var(--gold);font:bold 15px Arial}
+.pickBadge{left:7px;right:auto;background:#59227b;color:white;border-color:#e495ff}
+.deckFooter{position:fixed;z-index:10;left:0;right:0;bottom:0;padding:15px;text-align:center;background:rgba(0,0,0,.93);border-top:1px solid #725f27}
+.commandBtn{min-width:220px;min-height:54px;padding:10px 22px;border:2px solid var(--gold);background:#17120b;color:var(--gold);font-weight:bold;font-size:20px;box-shadow:0 0 12px rgba(255,204,62,.5);cursor:pointer}
+.commandBtn:disabled{opacity:.35;box-shadow:none;cursor:not-allowed}.commandBtn.secondary{border-color:#9ca4ba;color:#fff;box-shadow:none;background:#10121a}
+#emptyDeck{max-width:700px;margin:90px auto;text-align:center;padding:25px;background:var(--panel);border:1px solid #8b691f;line-height:1.8}
+.battleHud{max-width:1120px;margin:auto;display:grid;grid-template-columns:1fr auto 1fr;gap:25px;align-items:center}
+.fighter{display:grid;gap:5px}.fighter.enemy{text-align:right}.fighter strong{color:var(--blue);font-size:23px}.fighter.enemy strong{color:var(--red)}
+.hpTrack{height:16px;border:2px solid var(--gold);background:#160708;overflow:hidden}.hpTrack i{display:block;width:100%;height:100%;background:#22d45f;transition:width .45s}
+.roundBadge{text-align:center;border:1px solid var(--gold);background:var(--panel);padding:8px 18px;color:var(--gold)}.roundBadge b{display:block;font-size:24px}
+.roundMessage{text-align:center;min-height:54px;padding:18px 5px;color:#fff;font-size:20px;text-shadow:0 0 8px #000}
+.arena{max-width:720px;min-height:385px;margin:auto;display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:20px}
+.battleSlot{width:min(240px,100%);aspect-ratio:3/4;border:2px solid #60552f;background:rgba(0,0,0,.72);display:grid;place-items:center;justify-self:center;color:#746b58;font-size:22px}
+.battleSlot.reveal{border-color:var(--gold);box-shadow:0 0 20px rgba(255,206,74,.55)}
+.revealedCard{width:100%;height:100%;position:relative}.cardTotal{position:absolute;left:7px;right:7px;bottom:7px;padding:7px;text-align:center;background:rgba(0,0,0,.88);border:1px solid var(--gold);color:var(--gold);font:bold 18px Arial}
+.versus{text-align:center;color:var(--gold);font:bold 30px Arial}.battleHand{max-width:1000px;margin:22px auto 0;display:flex;justify-content:center;gap:12px}
+.handCard{width:min(18vw,170px);transition:transform .15s}.handCard:hover{transform:translateY(-7px)}.handCard.used{display:none}
+.nextBtn{display:block;margin:8px auto}.resultScreen{display:grid;place-items:center;padding:20px}.resultPanel{width:min(100%,980px);padding:28px;background:var(--panel);border:2px solid var(--gold);text-align:center;box-shadow:0 0 25px rgba(255,191,46,.35)}
+.resultLabel{color:#c9b875}.resultPanel h2{margin:5px;color:var(--gold);font-size:clamp(42px,8vw,78px);text-shadow:0 0 18px #9c5e00}.rewardChoices{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:22px 0}.rewardCard{width:min(150px,28vw)}.rewardCard:hover{border-color:var(--purple);box-shadow:0 0 15px var(--purple)}
+.resultActions{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:24px}
+@media(max-width:650px){.screen{padding:10px 10px 96px}.pageHeader{gap:10px}.iconBtn{width:40px;height:40px}.cardGrid{grid-template-columns:repeat(3,1fr);gap:7px}.deckCard{padding:2px}.battleHud{gap:8px;grid-template-columns:1fr 68px 1fr}.fighter strong{font-size:16px}.fighter span{font-size:12px}.roundBadge{padding:5px}.roundBadge b{font-size:16px}.arena{min-height:275px;grid-template-columns:1fr 35px 1fr;gap:6px}.versus{font-size:18px}.battleSlot{width:100%;max-width:155px}.battleHand{gap:4px}.handCard{width:19%;padding:2px}.roundMessage{font-size:16px}.commandBtn{min-width:170px;font-size:17px}.resultPanel{padding:18px 10px}}

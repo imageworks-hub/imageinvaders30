@@ -1565,7 +1565,7 @@ body.stage5-active{
     gap:14px;
     padding:18px;
     box-sizing:border-box;
-    pointer-events:none;
+    pointer-events:auto;
 }
 
 #cardImage{
