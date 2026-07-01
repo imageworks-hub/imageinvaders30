@@ -178,11 +178,15 @@ function playRound(playerCard){
   const difference = Math.abs(playerCard.total-enemyCard.total);
   if(playerCard.total > enemyCard.total){
     enemyHp = Math.max(0,enemyHp-difference);
+    showRoundCardEffect(playerSlot,enemySlot,"player");
     roundMessage.textContent = `YOU ${playerCard.total} - ${enemyCard.total} RIVAL / RIVAL -${difference} HP`;
   }else if(enemyCard.total > playerCard.total){
     playerHp = Math.max(0,playerHp-difference);
+    showRoundCardEffect(enemySlot,playerSlot,"rival");
     roundMessage.textContent = `YOU ${playerCard.total} - ${enemyCard.total} RIVAL / YOU -${difference} HP`;
   }else{
+    playerSlot.classList.add("roundDraw");
+    enemySlot.classList.add("roundDraw");
     roundMessage.textContent = `TOTAL ${playerCard.total} / DRAW`;
   }
   updateHud();
@@ -193,10 +197,27 @@ function playRound(playerCard){
 }
 
 function clearSlots(){
-  playerSlot.classList.remove("reveal");
-  enemySlot.classList.remove("reveal");
+  playerSlot.classList.remove("reveal","roundWinner","roundLoser","playerRoundWinner","rivalRoundWinner","roundDraw");
+  enemySlot.classList.remove("reveal","roundWinner","roundLoser","playerRoundWinner","rivalRoundWinner","roundDraw");
   playerSlot.innerHTML = "<span>YOU</span>";
   enemySlot.innerHTML = "<span>RIVAL</span>";
+}
+
+function showRoundCardEffect(winnerSlot,loserSlot,winner){
+  winnerSlot.classList.add("roundWinner",winner === "player" ? "playerRoundWinner" : "rivalRoundWinner");
+  loserSlot.classList.add("roundLoser");
+  const burst = document.createElement("div");
+  burst.className = "roundWinBurst";
+  for(let index=0;index<18;index++){
+    const spark = document.createElement("i");
+    const angle = Math.PI*2*index/18;
+    const distance = 80+Math.random()*95;
+    spark.style.setProperty("--dx",`${Math.cos(angle)*distance}px`);
+    spark.style.setProperty("--dy",`${Math.sin(angle)*distance}px`);
+    spark.style.setProperty("--delay",`${Math.random()*.16}s`);
+    burst.appendChild(spark);
+  }
+  winnerSlot.appendChild(burst);
 }
 
 function updateHud(){

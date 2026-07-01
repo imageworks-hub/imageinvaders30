@@ -30,6 +30,16 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 .arena{max-width:720px;min-height:385px;margin:auto;display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:20px}
 .battleSlot{width:min(240px,100%);aspect-ratio:3/4;border:2px solid #60552f;background:rgba(0,0,0,.72);display:grid;place-items:center;justify-self:center;color:#746b58;font-size:22px}
 .battleSlot.reveal{border-color:var(--gold);box-shadow:0 0 20px rgba(255,206,74,.55)}
+.battleSlot.roundWinner{position:relative;z-index:3;border-color:var(--gold);box-shadow:0 0 16px var(--gold),0 0 34px rgba(62,188,255,.75);animation:roundWinnerPulse .75s ease-out}
+.battleSlot.roundWinner::after{content:"ROUND WIN";position:absolute;z-index:5;left:50%;top:-18px;transform:translateX(-50%);width:max-content;padding:5px 11px;border:1px solid var(--gold);background:#100c05;color:var(--gold);font:bold 14px Arial;box-shadow:0 0 12px var(--gold)}
+.battleSlot.rivalRoundWinner{box-shadow:0 0 16px var(--gold),0 0 34px rgba(255,61,85,.8)}
+.battleSlot.roundLoser{animation:roundLoserShake .38s ease-out}.battleSlot.roundLoser .revealedCard{filter:brightness(.48) grayscale(.45);opacity:.72}
+.battleSlot.roundDraw{border-color:#d9e2f2;box-shadow:0 0 16px #d9e2f2;animation:roundDrawPulse .65s ease-out}
+.roundWinBurst{position:absolute;z-index:6;inset:0;pointer-events:none;overflow:visible}.roundWinBurst i{position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 9px var(--gold);animation:roundSpark .8s ease-out forwards;animation-delay:var(--delay)}
+@keyframes roundWinnerPulse{0%{transform:scale(.88);opacity:.55}55%{transform:scale(1.08)}100%{transform:scale(1.03)}}
+@keyframes roundLoserShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}55%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+@keyframes roundDrawPulse{0%{transform:scale(.96)}50%{transform:scale(1.035)}100%{transform:scale(1)}}
+@keyframes roundSpark{0%{transform:translate(0,0) scale(.4);opacity:0}20%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
 .revealedCard{width:100%;height:100%;position:relative}.cardTotal{position:absolute;left:7px;right:7px;bottom:7px;padding:7px;text-align:center;background:rgba(0,0,0,.88);border:1px solid var(--gold);color:var(--gold);font:bold 18px Arial}
 .versus{text-align:center;color:var(--gold);font:bold 30px Arial}.battleHand{max-width:1000px;margin:22px auto 0;display:flex;justify-content:center;gap:12px}
 .handCard{width:min(18vw,170px);transition:transform .15s}.handCard:hover{transform:translateY(-7px)}.handCard.used{display:none}
@@ -45,6 +55,6 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 .resultScreen.rivalVictory #winnerBadge{color:#ff9cac;border-color:var(--red);box-shadow:0 0 15px var(--red)}
 @keyframes victoryRise{0%{transform:translateY(0) rotate(0);opacity:0}18%{opacity:1}100%{transform:translateY(-680px) rotate(300deg);opacity:0}}
 @keyframes victoryPulse{0%{transform:scale(.94);opacity:.55}55%{transform:scale(1.025);opacity:1}100%{transform:scale(1)}}
-@media(prefers-reduced-motion:reduce){#victoryEffects span,.resultScreen .resultPanel{animation:none!important}}
+@media(prefers-reduced-motion:reduce){#victoryEffects span,.resultScreen .resultPanel,.battleSlot,.roundWinBurst i{animation:none!important}}
 .resultActions{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:24px}
 @media(max-width:650px){.screen{padding:10px 10px 96px}.pageHeader{gap:10px}.iconBtn{width:40px;height:40px}.cardGrid{grid-template-columns:repeat(3,1fr);gap:7px}.deckCard{padding:2px}.battleHud{gap:8px;grid-template-columns:1fr 68px 1fr}.fighter strong{font-size:16px}.fighter span{font-size:12px}.roundBadge{padding:5px}.roundBadge b{font-size:16px}.arena{min-height:275px;grid-template-columns:1fr 35px 1fr;gap:6px}.versus{font-size:18px}.battleSlot{width:100%;max-width:155px}.battleHand{gap:4px}.handCard{width:19%;padding:2px}.roundMessage{font-size:16px}.commandBtn{min-width:170px;font-size:17px}.resultPanel{padding:18px 10px}}
