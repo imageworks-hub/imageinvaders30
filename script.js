@@ -67,6 +67,7 @@ function openTitle2(){
 
     title2Screen.classList.add("active");
     title2Screen.setAttribute("aria-hidden","false");
+    window.GameAudio?.setScene("cardSelect");
 
 }
 
@@ -76,6 +77,7 @@ function closeTitle2(){
 
     title2Screen.classList.remove("active");
     title2Screen.setAttribute("aria-hidden","true");
+    window.GameAudio?.setScene("title");
 
 }
 
@@ -193,6 +195,7 @@ document.getElementById("damageFlashOverlay");
 let damageFlashTimeout = null;
 
 function triggerPlayerDamageFlash(barrierBlocked){
+    window.GameAudio?.sfx(barrierBlocked ? "barrier" : "damage");
 
     if(!damageFlashOverlay)return;
 
@@ -616,6 +619,7 @@ let tripleShotEnabled = false;
 function firePlayerBullets(){
 
     if(playerEntering)return;
+    window.GameAudio?.sfx("shoot");
 
     const shotX = player.x;
     const shotY = player.y - player.size + 10;
@@ -1428,6 +1432,8 @@ function triggerClear(){
     if(clearFlag)return;
 
     clearFlag = true;
+    window.GameAudio?.setScene("clear");
+    window.GameAudio?.sfx("clear");
 
     const availableCards = getStageCards();
 
@@ -1502,6 +1508,8 @@ window.stage5Bridge = {
         score = finalScore;
         lives = 0;
         gameOver = true;
+        window.GameAudio?.setScene("gameover");
+        window.GameAudio?.sfx("gameover");
     }
 
 };
@@ -1917,6 +1925,8 @@ bossDamageTimer = 10;
     if(boss.hp <= 0 && !clearFlag){
 
     clearFlag = true;
+    window.GameAudio?.setScene("clear");
+    window.GameAudio?.sfx("clear");
 
     const availableCards = getStageCards();
 
@@ -2277,6 +2287,8 @@ if(score>=10000){
 if(lives<=0 && !gameOver){
 
     gameOver = true;
+    window.GameAudio?.setScene("gameover");
+    window.GameAudio?.sfx("gameover");
 
     setTimeout(function(){
 
@@ -3086,6 +3098,7 @@ stageBackBtn.onclick = function(){
 
     stageSelectScreen.style.display = "none";
     titleScreen.style.display = "flex";
+    window.GameAudio?.setScene("title");
     setStage4CommentVisible(false);
 
     if(Number(localStorage.getItem("barrier")) > 0){
@@ -3099,6 +3112,8 @@ stageBackBtn.onclick = function(){
 function startGame(){
 
     stageSelectScreen.style.display = "none";
+    window.GameAudio?.setScene("stage" + currentStage);
+    window.GameAudio?.sfx("select");
 
     setStage4CommentVisible(currentStage === 4);
 
@@ -3143,6 +3158,8 @@ startBtn.onclick = function(){
     titleScreen.style.display = "none";
 
     stageSelectScreen.style.display = "flex";
+    window.GameAudio?.setScene("stageSelect");
+    window.GameAudio?.sfx("select");
 
 };
 
@@ -3155,12 +3172,15 @@ document.getElementById("shopScreen");
 shopBtn.onclick = function(){
 
     shopScreen.style.display = "flex";
+    window.GameAudio?.setScene("shop");
+    window.GameAudio?.sfx("select");
 
 };
 
 backBtn.onclick = function(){
 
     shopScreen.style.display = "none";
+    window.GameAudio?.setScene("title");
 
 };
 

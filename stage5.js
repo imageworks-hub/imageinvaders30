@@ -237,6 +237,7 @@ function createProjectile(material,x,y,z,vx,vy,vz,style="normal"){
 
 function fire(){
     if(!running || shotCooldown > 0)return;
+    window.GameAudio?.sfx("shoot");
 
     shotCooldown = 0.12;
     playerBullets.push(createProjectile(
@@ -278,6 +279,8 @@ function takeDamage(){
     const barrierBlocked =
         window.stage5Bridge &&
         window.stage5Bridge.getBarrier() > 0;
+
+    window.GameAudio?.sfx(barrierBlocked ? "barrier" : "damage");
 
     lives = window.stage5Bridge ? window.stage5Bridge.takeDamage() : lives-1;
 

@@ -4,6 +4,8 @@ html,body{margin:0;min-height:100%;background:#02030a;color:#fff;font-family:Geo
 body{min-height:100vh;background-image:url("cardbattle-bg.png");background-size:cover;background-position:center;background-attachment:fixed}
 body::before{content:"";position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:-1}
 button{font:inherit;color:inherit;touch-action:manipulation}
+#soundToggle{position:fixed;z-index:1000;top:12px;right:12px;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:1px solid #ffd65a;border-radius:50%;background:#090b13;color:#ffd65a;font:bold 24px Arial;box-shadow:0 0 10px rgba(255,214,90,.65);cursor:pointer}
+#soundToggle.sound-off{color:#9ca4ba;border-color:#9ca4ba;box-shadow:none}
 [hidden]{display:none!important}
 .screen{min-height:100vh;padding:18px 22px 110px}
 .pageHeader{display:flex;align-items:center;gap:18px;max-width:1280px;margin:auto;border-bottom:1px solid #8b691f;padding-bottom:12px}

@@ -95,6 +95,7 @@ function renderDeck(){
 }
 
 function toggleDeckCard(card,button){
+  window.GameAudio?.sfx("select");
   const chosen = selectedDeck.filter(item => item.id === card.id).length;
   if(chosen > 0){
     const lastIndex = selectedDeck.map(item => item.id).lastIndexOf(card.id);
@@ -126,6 +127,8 @@ function shuffled(items){
 
 function startBattle(){
   if(selectedDeck.length !== DECK_SIZE)return;
+  window.GameAudio?.setScene("cardBattle");
+  window.GameAudio?.sfx("select");
   playerDeck = selectedDeck.map((card,index) => ({...card,instance:`p-${index}`}));
   enemyDeck = shuffled(catalog).slice(0,DECK_SIZE).map((card,index) => ({...card,instance:`e-${index}`}));
   playerUsed = [];
@@ -161,6 +164,7 @@ function cardMarkup(card){
 function playRound(playerCard){
   if(roundLocked || playerUsed.some(card => card.instance === playerCard.instance))return;
   roundLocked = true;
+  window.GameAudio?.sfx("reveal");
   const remainingEnemy = enemyDeck.filter(card => !enemyUsed.some(used => used.instance === card.instance));
   const enemyCard = remainingEnemy[Math.floor(Math.random()*remainingEnemy.length)];
   playerUsed.push(playerCard);
@@ -222,6 +226,7 @@ function finishBattle(){
   rewardChoices.innerHTML = "";
   resultActions.hidden = true;
   if(playerHp > enemyHp){
+    window.GameAudio?.sfx("win");
     title.textContent = "YOU WIN";
     detail.textContent = "相手が使ったカードから1枚獲得できます";
     enemyUsed.forEach(card => {
@@ -232,6 +237,7 @@ function finishBattle(){
       rewardChoices.appendChild(button);
     });
   }else if(enemyHp > playerHp){
+    window.GameAudio?.sfx("lose");
     const lost = playerUsed[Math.floor(Math.random()*playerUsed.length)];
     removeOneCard(lost.id);
     title.textContent = "YOU LOSE";
@@ -239,6 +245,7 @@ function finishBattle(){
     rewardChoices.innerHTML = `<div class="rewardCard"><img src="${lost.image}" alt="失った STAGE ${lost.stage} card"></div>`;
     resultActions.hidden = false;
   }else{
+    window.GameAudio?.sfx("select");
     title.textContent = "DRAW";
     detail.textContent = "引き分けのためカードの移動はありません";
     resultActions.hidden = false;
@@ -270,7 +277,7 @@ function removeOneCard(id){
 
 document.getElementById("deckBackBtn").addEventListener("click",() => location.href="./index.html#cardbattle");
 document.getElementById("titleBtn").addEventListener("click",() => location.href="./index.html#cardbattle");
-document.getElementById("rematchBtn").addEventListener("click",() => {inventory=loadInventory();renderDeck();showScreen(deckScreen);});
+document.getElementById("rematchBtn").addEventListener("click",() => {inventory=loadInventory();renderDeck();showScreen(deckScreen);window.GameAudio?.setScene("cardSelect");});
 battleStartBtn.addEventListener("click",startBattle);
 nextRoundBtn.addEventListener("click",advanceRound);
 
