@@ -13,6 +13,24 @@ if(Number(localStorage.getItem("barrier")) > 0){
 const titleImage =
 document.getElementById("titleImage");
 
+const title2Screen =
+document.getElementById("title2Screen");
+
+const title2StartBtn =
+document.getElementById("title2StartBtn");
+
+const titleSwipeHint =
+document.getElementById("titleSwipeHint");
+
+const title2BackBtn =
+document.getElementById("title2BackBtn");
+
+const title2CardCaseBtn =
+document.getElementById("title2CardCaseBtn");
+
+const title2CardCaseCount =
+document.getElementById("title2CardCaseCount");
+
 const accessCount =
 document.getElementById("accessCount");
 
@@ -42,6 +60,110 @@ if(accessCount){
     });
 
 }
+
+function openTitle2(){
+
+    if(!title2Screen)return;
+
+    title2Screen.classList.add("active");
+    title2Screen.setAttribute("aria-hidden","false");
+
+}
+
+function closeTitle2(){
+
+    if(!title2Screen)return;
+
+    title2Screen.classList.remove("active");
+    title2Screen.setAttribute("aria-hidden","true");
+
+}
+
+function bindTitleSwipe(element,direction,callback){
+
+    if(!element)return;
+
+    let tracking = false;
+    let startX = 0;
+    let startY = 0;
+
+    element.addEventListener("dragstart",function(e){
+        e.preventDefault();
+    });
+
+    element.addEventListener("pointerdown",function(e){
+
+        if(e.pointerType === "mouse" && e.button !== 0)return;
+        if(e.target.closest("button,#cardCaseBtn,#title2CardCaseBtn"))return;
+
+        tracking = true;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        if(element.setPointerCapture){
+            element.setPointerCapture(e.pointerId);
+        }
+
+        e.preventDefault();
+
+    });
+
+    element.addEventListener("pointerup",function(e){
+
+        if(!tracking)return;
+        tracking = false;
+
+        const moveX = e.clientX - startX;
+        const moveY = e.clientY - startY;
+        const movedInDirection = direction === "right"
+            ? moveX >= 70
+            : moveX <= -70;
+
+        if(
+            movedInDirection &&
+            Math.abs(moveX) > Math.abs(moveY) * 1.2
+        ){
+            callback();
+        }
+
+    });
+
+    element.addEventListener("pointercancel",function(){
+        tracking = false;
+    });
+
+}
+
+bindTitleSwipe(titleScreen,"right",openTitle2);
+bindTitleSwipe(title2Screen,"left",closeTitle2);
+
+if(titleSwipeHint){
+    titleSwipeHint.onclick = openTitle2;
+}
+
+if(title2BackBtn){
+    title2BackBtn.onclick = closeTitle2;
+}
+
+document.addEventListener("keydown",function(e){
+
+    if(
+        e.key === "ArrowRight" &&
+        titleScreen.style.display !== "none" &&
+        !title2Screen.classList.contains("active")
+    ){
+        openTitle2();
+    }
+
+    if(
+        e.key === "ArrowLeft" &&
+        title2Screen &&
+        title2Screen.classList.contains("active")
+    ){
+        closeTitle2();
+    }
+
+});
 
 let gameStarted = false;
 let startWait = 0;
@@ -992,14 +1114,18 @@ function getOwnedCards(){
 
 function updateCardCaseCount(){
 
-    if(!cardCaseCount)return;
-
     const totalCards = getOwnedCards().reduce(
         (total,card)=>total + card.count,
         0
     );
 
-    cardCaseCount.textContent = totalCards;
+    if(cardCaseCount){
+        cardCaseCount.textContent = totalCards;
+    }
+
+    if(title2CardCaseCount){
+        title2CardCaseCount.textContent = totalCards;
+    }
 
 }
 
@@ -2838,16 +2964,18 @@ if(cardDetailView){
 
 }
 
-if(cardCaseBtn){
+function bindCardCaseButton(button){
 
-    cardCaseBtn.onclick = function(e){
+    if(!button)return;
+
+    button.onclick = function(e){
 
         if(e)e.preventDefault();
         openCardCase();
 
     };
 
-    cardCaseBtn.addEventListener("touchend", function(e){
+    button.addEventListener("touchend",function(e){
 
         e.preventDefault();
         openCardCase();
@@ -2856,6 +2984,8 @@ if(cardCaseBtn){
 
 }
 
+bindCardCaseButton(cardCaseBtn);
+bindCardCaseButton(title2CardCaseBtn);
 if(cardCaseClose){
 
     cardCaseClose.onclick = closeCardCase;

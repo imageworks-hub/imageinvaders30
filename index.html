@@ -13,7 +13,7 @@ content="width=device-width,initial-scale=1.0,user-scalable=no">
 
 <div id="titleScreen">
 
-    <img src="title.png" id="titleImage">
+    <img src="title.png" id="titleImage" draggable="false">
 
     <button id="startBtn"></button>
 
@@ -28,6 +28,33 @@ content="width=device-width,initial-scale=1.0,user-scalable=no">
     </div>
     <div id="accessCounter">
         ACCESS <span id="accessCount">------</span>
+    </div>
+
+    <button id="titleSwipeHint" type="button" aria-label="NEXT GAME">
+        <span>SWIPE</span>
+        <span class="titleSwipeArrow">&#8594;</span>
+    </button>
+
+</div>
+
+<div id="title2Screen" aria-hidden="true">
+
+    <img src="title2.png" id="title2Image" alt="IMAGE CARD BATTLE" draggable="false">
+
+    <button id="title2StartBtn" type="button" aria-label="IMAGE CARD BATTLE START">
+        START
+    </button>
+
+    <div id="title2CardCaseBtn">
+        <img src="cardcase.png" id="title2CardCaseImage" alt="CARD CASE">
+        <div id="title2CardCaseCount">0</div>
+    </div>
+
+    <button id="title2BackBtn" type="button" aria-label="BACK">&#10094;</button>
+
+    <div id="title2BackHint" aria-hidden="true">
+        <span class="title2BackArrow">&#8592;</span>
+        <span>SWIPE BACK</span>
     </div>
 
 </div>
