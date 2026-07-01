@@ -1,7 +1,7 @@
 :root{color-scheme:dark;--gold:#ffd65a;--blue:#3ebcff;--purple:#c15cff;--red:#ff3d55;--panel:rgba(5,7,16,.9)}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:#02030a;color:#fff;font-family:Georgia,"Yu Mincho",serif;overscroll-behavior:none}
-body{min-height:100vh;background-image:url("title2.png");background-size:cover;background-position:center;background-attachment:fixed}
+body{min-height:100vh;background-image:url("cardbattle-bg.png");background-size:cover;background-position:center;background-attachment:fixed}
 body::before{content:"";position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:-1}
 button{font:inherit;color:inherit;touch-action:manipulation}
 [hidden]{display:none!important}
