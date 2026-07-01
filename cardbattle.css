@@ -34,6 +34,17 @@ button{font:inherit;color:inherit;touch-action:manipulation}
 .versus{text-align:center;color:var(--gold);font:bold 30px Arial}.battleHand{max-width:1000px;margin:22px auto 0;display:flex;justify-content:center;gap:12px}
 .handCard{width:min(18vw,170px);transition:transform .15s}.handCard:hover{transform:translateY(-7px)}.handCard.used{display:none}
 .nextBtn{display:block;margin:8px auto}.resultScreen{display:grid;place-items:center;padding:20px}.resultPanel{width:min(100%,980px);padding:28px;background:var(--panel);border:2px solid var(--gold);text-align:center;box-shadow:0 0 25px rgba(255,191,46,.35)}
+.resultPanel{position:relative;overflow:hidden}.resultPanel>*:not(#victoryEffects){position:relative;z-index:2}
 .resultLabel{color:#c9b875}.resultPanel h2{margin:5px;color:var(--gold);font-size:clamp(42px,8vw,78px);text-shadow:0 0 18px #9c5e00}.rewardChoices{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:22px 0}.rewardCard{width:min(150px,28vw)}.rewardCard:hover{border-color:var(--purple);box-shadow:0 0 15px var(--purple)}
+#winnerBadge{width:max-content;max-width:90%;margin:0 auto 10px;padding:7px 18px;border:1px solid var(--gold);background:#120e08;color:var(--gold);font:bold 18px Arial;box-shadow:0 0 14px rgba(255,214,90,.7)}
+#victoryEffects{position:absolute;z-index:1;inset:0;pointer-events:none;overflow:hidden}
+#victoryEffects span{position:absolute;bottom:-24px;width:5px;height:16px;background:var(--gold);box-shadow:0 0 9px var(--gold);animation:victoryRise 1.9s ease-out forwards}
+.resultScreen.playerVictory .resultPanel{border-color:var(--blue);box-shadow:0 0 18px var(--blue),0 0 42px rgba(255,214,90,.45);animation:victoryPulse .7s ease-out}
+.resultScreen.playerVictory #winnerBadge{color:#8de7ff;border-color:var(--blue);box-shadow:0 0 15px var(--blue)}
+.resultScreen.rivalVictory .resultPanel{border-color:var(--red);box-shadow:0 0 18px var(--red),0 0 42px rgba(255,214,90,.4);animation:victoryPulse .7s ease-out}
+.resultScreen.rivalVictory #winnerBadge{color:#ff9cac;border-color:var(--red);box-shadow:0 0 15px var(--red)}
+@keyframes victoryRise{0%{transform:translateY(0) rotate(0);opacity:0}18%{opacity:1}100%{transform:translateY(-680px) rotate(300deg);opacity:0}}
+@keyframes victoryPulse{0%{transform:scale(.94);opacity:.55}55%{transform:scale(1.025);opacity:1}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){#victoryEffects span,.resultScreen .resultPanel{animation:none!important}}
 .resultActions{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:24px}
 @media(max-width:650px){.screen{padding:10px 10px 96px}.pageHeader{gap:10px}.iconBtn{width:40px;height:40px}.cardGrid{grid-template-columns:repeat(3,1fr);gap:7px}.deckCard{padding:2px}.battleHud{gap:8px;grid-template-columns:1fr 68px 1fr}.fighter strong{font-size:16px}.fighter span{font-size:12px}.roundBadge{padding:5px}.roundBadge b{font-size:16px}.arena{min-height:275px;grid-template-columns:1fr 35px 1fr;gap:6px}.versus{font-size:18px}.battleSlot{width:100%;max-width:155px}.battleHand{gap:4px}.handCard{width:19%;padding:2px}.roundMessage{font-size:16px}.commandBtn{min-width:170px;font-size:17px}.resultPanel{padding:18px 10px}}

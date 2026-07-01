@@ -225,7 +225,9 @@ function finishBattle(){
   const detail = document.getElementById("resultDetail");
   rewardChoices.innerHTML = "";
   resultActions.hidden = true;
+  clearVictoryEffect();
   if(playerHp > enemyHp){
+    showVictoryEffect("player");
     window.GameAudio?.sfx("win");
     title.textContent = "YOU WIN";
     detail.textContent = "相手が使ったカードから1枚獲得できます";
@@ -237,6 +239,7 @@ function finishBattle(){
       rewardChoices.appendChild(button);
     });
   }else if(enemyHp > playerHp){
+    showVictoryEffect("rival");
     window.GameAudio?.sfx("lose");
     const lost = playerUsed[Math.floor(Math.random()*playerUsed.length)];
     removeOneCard(lost.id);
@@ -251,6 +254,27 @@ function finishBattle(){
     resultActions.hidden = false;
   }
   showScreen(resultScreen);
+}
+
+function clearVictoryEffect(){
+  resultScreen.classList.remove("playerVictory","rivalVictory");
+  document.getElementById("victoryEffects").innerHTML = "";
+  document.getElementById("winnerBadge").hidden = true;
+}
+
+function showVictoryEffect(winner){
+  const effects = document.getElementById("victoryEffects");
+  const badge = document.getElementById("winnerBadge");
+  resultScreen.classList.add(winner === "player" ? "playerVictory" : "rivalVictory");
+  badge.textContent = winner === "player" ? "YOU WINNER" : "RIVAL WINNER";
+  badge.hidden = false;
+  for(let index=0;index<34;index++){
+    const particle = document.createElement("span");
+    particle.style.left = `${3+Math.random()*94}%`;
+    particle.style.animationDelay = `${Math.random()*.65}s`;
+    particle.style.animationDuration = `${1.35+Math.random()*.85}s`;
+    effects.appendChild(particle);
+  }
 }
 
 function claimReward(card){
