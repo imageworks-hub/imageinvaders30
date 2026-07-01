@@ -311,61 +311,114 @@ button{
 
 
 #startBtn{
-
     position:absolute;
-
-    width:220px;
-    height:90px;
-
-    top:58%;
+    top:62%;
     left:50%;
-
-    transform:translateX(-50%);
-
-    background:transparent;
-
-    border:none;
-
     z-index:1001;
+    width:300px;
+    height:78px;
+    padding:0;
+    border:3px solid #a96dff;
+    border-radius:6px;
+    transform:translate(-50%,-50%);
+    overflow:hidden;
+    background:rgba(4,8,28,0.92);
+    color:white;
+    font-family:Impact,"Arial Black",sans-serif;
+    font-size:34px;
+    font-weight:bold;
+    letter-spacing:0;
+    cursor:pointer;
+    text-shadow:
+        0 0 2px white,
+        0 0 5px cyan,
+        0 0 9px #7c3cff;
+    box-shadow:
+        inset 0 0 0 2px rgba(94,225,255,0.42),
+        inset 0 -10px 22px rgba(255,126,0,0.18),
+        0 0 10px cyan,
+        0 0 24px #7c3cff;
+    animation:titleStartIdle 1.35s ease-in-out infinite alternate;
+}
+
+#startBtn::before{
+    content:"";
+    position:absolute;
+    inset:7px;
+    border:1px solid rgba(255,255,255,0.58);
+    border-radius:3px;
+    pointer-events:none;
+}
+
+#startBtn span{
+    position:relative;
+    z-index:1;
+}
+
+#startBtn:active{
+    transform:translate(-50%,-50%) scale(0.96);
 }
 
 #startBtn.purchased{
-
-    border:3px solid rgba(255,255,255,0.9);
-
-    border-radius:18px;
-
+    border-color:white;
     box-shadow:
-        0 0 12px white,
-        0 0 28px cyan,
-        0 0 52px #7c3cff;
+        inset 0 0 0 2px rgba(255,215,0,0.68),
+        inset 0 -10px 24px rgba(255,126,0,0.28),
+        0 0 16px white,
+        0 0 34px cyan,
+        0 0 64px #7c3cff;
+    animation:startGlow 0.9s ease-in-out infinite alternate;
+}
 
-    animation:startGlow 0.9s infinite alternate;
-
+@keyframes titleStartIdle{
+    from{
+        box-shadow:
+            inset 0 0 0 2px rgba(94,225,255,0.34),
+            inset 0 -10px 18px rgba(255,126,0,0.14),
+            0 0 7px cyan,
+            0 0 17px #7c3cff;
+    }
+    to{
+        box-shadow:
+            inset 0 0 0 2px rgba(94,225,255,0.55),
+            inset 0 -10px 26px rgba(255,126,0,0.24),
+            0 0 14px cyan,
+            0 0 30px #7c3cff;
+    }
 }
 
 @keyframes startGlow{
-
     from{
-
         box-shadow:
-            0 0 8px white,
-            0 0 20px cyan,
-            0 0 36px #7c3cff;
-
+            inset 0 0 0 2px rgba(255,215,0,0.52),
+            inset 0 -10px 20px rgba(255,126,0,0.22),
+            0 0 10px white,
+            0 0 25px cyan,
+            0 0 44px #7c3cff;
     }
-
     to{
-
         box-shadow:
-            0 0 18px white,
-            0 0 36px cyan,
-            0 0 72px #7c3cff;
-
+            inset 0 0 0 2px rgba(255,215,0,0.88),
+            inset 0 -10px 30px rgba(255,126,0,0.38),
+            0 0 20px white,
+            0 0 42px cyan,
+            0 0 78px #7c3cff;
     }
-
 }
 
+@media (min-aspect-ratio:4/3){
+    #startBtn{
+        top:68%;
+    }
+}
+
+@media (max-width:768px){
+    #startBtn{
+        width:230px;
+        height:64px;
+        font-size:29px;
+    }
+}
 #shopBtn{
 
     position:absolute;
@@ -1841,39 +1894,29 @@ body.stage5-active{
 
 #title2BackBtn{
     position:absolute;
-    top:max(10px,env(safe-area-inset-top));
-    left:2px;
-    z-index:1400;
-    width:48px;
-    height:52px;
-    padding:0;
-    border:0;
-    border-radius:0;
-    background:transparent;
-    color:white;
-    font-size:38px;
-    line-height:1;
-    cursor:pointer;
-    text-shadow:0 0 7px white,0 0 15px gold;
-}
-
-#title2BackHint{
-    position:absolute;
     left:50%;
     bottom:max(24px,env(safe-area-inset-bottom));
-    z-index:1302;
+    z-index:1400;
     display:flex;
     align-items:center;
+    justify-content:center;
     gap:8px;
+    width:auto;
+    height:42px;
+    padding:0 10px;
+    border:0;
+    border-radius:0;
     transform:translateX(-50%);
+    background:transparent;
     color:#ffe8a3;
     font-family:monospace;
     font-size:14px;
     font-weight:bold;
     letter-spacing:0;
     white-space:nowrap;
+    cursor:pointer;
+    touch-action:manipulation;
     text-shadow:0 0 7px gold,0 0 15px #8d41ff;
-    pointer-events:none;
 }
 
 .title2BackArrow{
@@ -1896,7 +1939,32 @@ body.stage5-active{
     .titleSwipeArrow{ font-size:24px; }
     #title2StartBtn{ top:78%; width:220px; height:62px; font-size:26px; }
     #title2CardCaseBtn{ left:12px; bottom:104px; width:58px; height:58px; }
-    #title2BackHint{ font-size:12px; }
+    #title2BackBtn{
+    position:absolute;
+    left:50%;
+    bottom:max(24px,env(safe-area-inset-bottom));
+    z-index:1400;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:auto;
+    height:42px;
+    padding:0 10px;
+    border:0;
+    border-radius:0;
+    transform:translateX(-50%);
+    background:transparent;
+    color:#ffe8a3;
+    font-family:monospace;
+    font-size:14px;
+    font-weight:bold;
+    letter-spacing:0;
+    white-space:nowrap;
+    cursor:pointer;
+    touch-action:manipulation;
+    text-shadow:0 0 7px gold,0 0 15px #8d41ff;
+}
 }
 
 @media (prefers-reduced-motion:reduce){
