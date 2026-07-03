@@ -26,15 +26,15 @@
       <button id="onlineLobbyClose" class="iconBtn lobbyClose" type="button" aria-label="デッキ選択へ戻る">&#x2039;</button>
       <p class="resultLabel">FRIEND MATCH</p>
       <h2>ONLINE BATTLE</h2>
-      <p class="lobbyLead">同じ8文字のルームコードで接続します</p>
+      <p class="lobbyLead">同じ8文字のコードで接続します。コピーして貼り付けできます</p>
       <div class="lobbyActions">
         <button id="createRoomBtn" class="commandBtn" type="button">CREATE ROOM</button>
         <div class="joinRoom">
-          <input id="roomCodeInput" type="text" maxlength="8" inputmode="text" autocomplete="off" placeholder="ROOM CODE" aria-label="ルームコード">
+          <input id="roomCodeInput" type="text" maxlength="8" inputmode="text" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go" pattern="[A-Za-z2-9]{8}" placeholder="ROOM CODE" aria-label="ルームコード">
           <button id="joinRoomBtn" class="commandBtn secondary" type="button">JOIN ROOM</button>
         </div>
       </div>
-      <div id="roomCodeDisplay" hidden><span>ROOM CODE</span><strong id="roomCodeText"></strong></div>
+      <button id="roomCodeDisplay" type="button" hidden aria-label="ルームコードをコピー"><span>ROOM CODE / TAP TO COPY</span><strong id="roomCodeText"></strong></button>
       <p id="onlineStatus" class="onlineStatus" aria-live="polite">ルームを作成するか、コードを入力してください</p>
     </div>
   </section>

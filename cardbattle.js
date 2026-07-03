@@ -294,6 +294,14 @@ function roomPeerId(code){
   return `imageinvaders-${code.toLowerCase()}`;
 }
 
+function normalizeRoomCode(value){
+  return String(value || "")
+    .normalize("NFKC")
+    .toUpperCase()
+    .replace(/[^A-Z2-9]/g,"")
+    .slice(0,8);
+}
+
 function openOnlineLobby(){
   if(selectedDeck.length !== DECK_SIZE)return;
   cleanupOnlineConnection();
@@ -330,7 +338,7 @@ function joinOnlineRoom(){
     setOnlineStatus("通信ライブラリを読み込めませんでした","error");
     return;
   }
-  const code = roomCodeInput.value.toUpperCase().replace(/[^A-Z2-9]/g,"");
+  const code = normalizeRoomCode(roomCodeInput.value);
   roomCodeInput.value = code;
   if(code.length !== 8){
     setOnlineStatus("8文字のルームコードを入力してください","error");
@@ -560,8 +568,22 @@ document.getElementById("rematchBtn").addEventListener("click",() => {cleanupOnl
 document.getElementById("onlineLobbyClose").addEventListener("click",()=>{cleanupOnlineConnection();showScreen(deckScreen);});
 document.getElementById("createRoomBtn").addEventListener("click",createOnlineRoom);
 document.getElementById("joinRoomBtn").addEventListener("click",joinOnlineRoom);
-roomCodeInput.addEventListener("input",()=>{roomCodeInput.value=roomCodeInput.value.toUpperCase().replace(/[^A-Z2-9]/g,"");});
+let roomCodeComposing = false;
+roomCodeInput.addEventListener("compositionstart",()=>{roomCodeComposing=true;});
+roomCodeInput.addEventListener("compositionend",()=>{roomCodeComposing=false;roomCodeInput.value=normalizeRoomCode(roomCodeInput.value);});
+roomCodeInput.addEventListener("input",()=>{if(!roomCodeComposing)roomCodeInput.value=normalizeRoomCode(roomCodeInput.value);});
+roomCodeInput.addEventListener("blur",()=>{roomCodeInput.value=normalizeRoomCode(roomCodeInput.value);});
 roomCodeInput.addEventListener("keydown",event=>{if(event.key === "Enter")joinOnlineRoom();});
+roomCodeDisplay.addEventListener("click",async()=>{
+  const code = roomCodeText.textContent;
+  if(!code)return;
+  try{
+    await navigator.clipboard.writeText(code);
+    setOnlineStatus("ルームコードをコピーしました","connected");
+  }catch(error){
+    setOnlineStatus("コードを長押ししてコピーしてください","error");
+  }
+});
 battleStartBtn.addEventListener("click",startBattle);
 onlineBattleBtn.addEventListener("click",openOnlineLobby);
 nextRoundBtn.addEventListener("click",advanceRound);
