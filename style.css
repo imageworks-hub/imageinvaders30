@@ -1855,7 +1855,7 @@ body.stage5-active{
 #title2CardCaseBtn{
     position:absolute;
     left:18px;
-    bottom:108px;
+    bottom:max(72px,calc(env(safe-area-inset-bottom) + 50px));
     z-index:1400;
     width:76px;
     height:76px;
@@ -1938,7 +1938,7 @@ body.stage5-active{
     #titleSwipeHint{ bottom:52px; height:34px; font-size:13px; }
     .titleSwipeArrow{ font-size:24px; }
     #title2StartBtn{ top:78%; width:220px; height:62px; font-size:26px; }
-    #title2CardCaseBtn{ left:12px; bottom:104px; width:58px; height:58px; }
+    #title2CardCaseBtn{ left:12px; bottom:max(72px,calc(env(safe-area-inset-bottom) + 50px)); width:58px; height:58px; }
     #title2BackBtn{
     position:absolute;
     left:50%;
@@ -1979,15 +1979,15 @@ body.stage5-active{
     z-index:5000;
     top:12px;
     right:12px;
-    width:44px;
-    height:44px;
+    width:32px;
+    height:32px;
     padding:0;
     border:1px solid gold;
     border-radius:50%;
     background:rgba(2,5,20,0.9);
     color:gold;
-    font:bold 24px Arial;
-    box-shadow:0 0 10px gold;
+    font:bold 18px Arial;
+    box-shadow:0 0 7px gold;
     cursor:pointer;
 }
 #soundToggle.sound-off{
