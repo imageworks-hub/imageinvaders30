@@ -29,6 +29,12 @@ const resultScreen = document.getElementById("resultScreen");
 const deckGrid = document.getElementById("deckGrid");
 const selectedCount = document.getElementById("selectedCount");
 const battleStartBtn = document.getElementById("battleStartBtn");
+const onlineBattleBtn = document.getElementById("onlineBattleBtn");
+const onlineLobby = document.getElementById("onlineLobby");
+const onlineStatus = document.getElementById("onlineStatus");
+const roomCodeDisplay = document.getElementById("roomCodeDisplay");
+const roomCodeText = document.getElementById("roomCodeText");
+const roomCodeInput = document.getElementById("roomCodeInput");
 const playerHand = document.getElementById("playerHand");
 const playerSlot = document.getElementById("playerSlot");
 const enemySlot = document.getElementById("enemySlot");
@@ -47,6 +53,16 @@ let playerHp = MAX_HP;
 let enemyHp = MAX_HP;
 let round = 0;
 let roundLocked = false;
+let battleMode = "cpu";
+let onlinePeer = null;
+let onlineConnection = null;
+let onlineIsHost = false;
+let localDeckSent = false;
+let remoteDeckIds = null;
+let pendingLocalCard = null;
+let pendingRemotePick = null;
+let onlineDisconnected = false;
+let onlineBattleStarted = false;
 
 function normalizeId(item){
   const source = `${item.id || ""} ${item.image || ""}`;
@@ -68,7 +84,7 @@ function saveInventory(){
 }
 
 function showScreen(screen){
-  [deckScreen,gameScreen,resultScreen].forEach(item => item.hidden = item !== screen);
+  [deckScreen,onlineLobby,gameScreen,resultScreen].forEach(item => item.hidden = item !== screen);
   window.scrollTo(0,0);
 }
 
@@ -114,6 +130,7 @@ function toggleDeckCard(card,button){
 function updateDeckCounter(){
   selectedCount.textContent = `${selectedDeck.length} / ${DECK_SIZE}`;
   battleStartBtn.disabled = selectedDeck.length !== DECK_SIZE;
+  onlineBattleBtn.disabled = selectedDeck.length !== DECK_SIZE;
 }
 
 function shuffled(items){
@@ -127,16 +144,25 @@ function shuffled(items){
 
 function startBattle(){
   if(selectedDeck.length !== DECK_SIZE)return;
+  battleMode = "cpu";
   window.GameAudio?.setScene("cardBattle");
   window.GameAudio?.sfx("select");
+  const cpuDeck = shuffled(catalog).slice(0,DECK_SIZE);
+  initializeBattle(cpuDeck);
+}
+
+function initializeBattle(opponentDeck){
   playerDeck = selectedDeck.map((card,index) => ({...card,instance:`p-${index}`}));
-  enemyDeck = shuffled(catalog).slice(0,DECK_SIZE).map((card,index) => ({...card,instance:`e-${index}`}));
+  enemyDeck = opponentDeck.map((card,index) => ({...card,instance:`e-${index}`}));
   playerUsed = [];
   enemyUsed = [];
   playerHp = MAX_HP;
   enemyHp = MAX_HP;
   round = 0;
   roundLocked = false;
+  pendingLocalCard = null;
+  pendingRemotePick = null;
+  onlineDisconnected = false;
   clearSlots();
   renderHand();
   updateHud();
@@ -164,9 +190,20 @@ function cardMarkup(card){
 function playRound(playerCard){
   if(roundLocked || playerUsed.some(card => card.instance === playerCard.instance))return;
   roundLocked = true;
-  window.GameAudio?.sfx("reveal");
+  if(battleMode === "online"){
+    pendingLocalCard = playerCard;
+    sendOnlineMessage({type:"pick",round:round+1,cardId:playerCard.id});
+    roundMessage.textContent = "相手のカード選択を待っています";
+    tryResolveOnlineRound();
+    return;
+  }
   const remainingEnemy = enemyDeck.filter(card => !enemyUsed.some(used => used.instance === card.instance));
   const enemyCard = remainingEnemy[Math.floor(Math.random()*remainingEnemy.length)];
+  resolveRound(playerCard,enemyCard);
+}
+
+function resolveRound(playerCard,enemyCard){
+  window.GameAudio?.sfx("reveal");
   playerUsed.push(playerCard);
   enemyUsed.push(enemyCard);
   round++;
@@ -241,6 +278,194 @@ function advanceRound(){
   updateHud();
 }
 
+function setOnlineStatus(message,state=""){
+  onlineStatus.textContent = message;
+  onlineStatus.className = `onlineStatus ${state}`.trim();
+}
+
+function generateRoomCode(){
+  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "";
+  for(let index=0;index<8;index++) code += characters[Math.floor(Math.random()*characters.length)];
+  return code;
+}
+
+function roomPeerId(code){
+  return `imageinvaders-${code.toLowerCase()}`;
+}
+
+function openOnlineLobby(){
+  if(selectedDeck.length !== DECK_SIZE)return;
+  cleanupOnlineConnection();
+  roomCodeDisplay.hidden = true;
+  roomCodeInput.value = "";
+  setOnlineStatus("ルームを作成するか、コードを入力してください");
+  showScreen(onlineLobby);
+}
+
+function createOnlineRoom(){
+  if(!window.Peer){
+    setOnlineStatus("通信ライブラリを読み込めませんでした","error");
+    return;
+  }
+  cleanupOnlineConnection();
+  onlineIsHost = true;
+  const code = generateRoomCode();
+  roomCodeText.textContent = code;
+  roomCodeDisplay.hidden = false;
+  setOnlineStatus("相手の参加を待っています");
+  onlinePeer = new Peer(roomPeerId(code),{debug:1});
+  onlinePeer.on("connection",connection=>{
+    if(onlineConnection){
+      connection.close();
+      return;
+    }
+    setupOnlineConnection(connection);
+  });
+  onlinePeer.on("error",error=>handleOnlineError(error));
+}
+
+function joinOnlineRoom(){
+  if(!window.Peer){
+    setOnlineStatus("通信ライブラリを読み込めませんでした","error");
+    return;
+  }
+  const code = roomCodeInput.value.toUpperCase().replace(/[^A-Z2-9]/g,"");
+  roomCodeInput.value = code;
+  if(code.length !== 8){
+    setOnlineStatus("8文字のルームコードを入力してください","error");
+    return;
+  }
+  cleanupOnlineConnection();
+  onlineIsHost = false;
+  roomCodeText.textContent = code;
+  roomCodeDisplay.hidden = false;
+  setOnlineStatus("ルームへ接続しています");
+  onlinePeer = new Peer(undefined,{debug:1});
+  onlinePeer.on("open",()=>{
+    setupOnlineConnection(onlinePeer.connect(roomPeerId(code),{reliable:true,serialization:"json"}));
+  });
+  onlinePeer.on("error",error=>handleOnlineError(error));
+}
+
+function setupOnlineConnection(connection){
+  onlineConnection = connection;
+  connection.on("open",()=>{
+    setOnlineStatus("接続しました。デッキを確認しています","connected");
+    localDeckSent = true;
+    sendOnlineMessage({type:"deck",cards:selectedDeck.map(card=>card.id)});
+    tryStartOnlineBattle();
+  });
+  connection.on("data",handleOnlineMessage);
+  connection.on("close",()=>{
+    if(!connection.__intentionalClose)handleOnlineDisconnect();
+  });
+  connection.on("error",()=>setOnlineStatus("対戦相手との通信でエラーが発生しました","error"));
+}
+
+function sendOnlineMessage(message){
+  if(!onlineConnection || !onlineConnection.open)return false;
+  onlineConnection.send(message);
+  return true;
+}
+
+function handleOnlineMessage(message){
+  if(!message || typeof message !== "object")return;
+  if(message.type === "deck"){
+    if(!isValidOnlineDeck(message.cards)){
+      setOnlineStatus("相手のデッキ情報が正しくありません","error");
+      return;
+    }
+    remoteDeckIds = [...message.cards];
+    tryStartOnlineBattle();
+    return;
+  }
+  if(message.type === "pick" && onlineBattleStarted){
+    const expectedRound = round+1;
+    const cardIsAvailable = enemyDeck.some(card=>
+      card.id === message.cardId && !enemyUsed.some(used=>used.instance === card.instance)
+    );
+    if(message.round !== expectedRound || !cardIsAvailable)return;
+    pendingRemotePick = {round:message.round,cardId:message.cardId};
+    tryResolveOnlineRound();
+  }
+}
+
+function isValidOnlineDeck(cardIds){
+  return Array.isArray(cardIds) &&
+    cardIds.length === DECK_SIZE &&
+    new Set(cardIds).size === DECK_SIZE &&
+    cardIds.every(id=>catalogById.has(id));
+}
+
+function tryStartOnlineBattle(){
+  if(onlineBattleStarted || !localDeckSent || !remoteDeckIds)return;
+  onlineBattleStarted = true;
+  battleMode = "online";
+  window.GameAudio?.setScene("cardBattle");
+  window.GameAudio?.sfx("select");
+  initializeBattle(remoteDeckIds.map(id=>catalogById.get(id)));
+  roundMessage.textContent = onlineIsHost
+    ? "オンライン対戦開始。カードを1枚選んでください"
+    : "オンライン対戦開始。カードを1枚選んでください";
+}
+
+function tryResolveOnlineRound(){
+  if(!pendingLocalCard || !pendingRemotePick)return;
+  if(pendingRemotePick.round !== round+1)return;
+  const enemyCard = enemyDeck.find(card=>
+    card.id === pendingRemotePick.cardId && !enemyUsed.some(used=>used.instance === card.instance)
+  );
+  if(!enemyCard)return;
+  const localCard = pendingLocalCard;
+  pendingLocalCard = null;
+  pendingRemotePick = null;
+  resolveRound(localCard,enemyCard);
+}
+
+function handleOnlineDisconnect(){
+  onlineDisconnected = true;
+  if(onlineBattleStarted && !gameScreen.hidden){
+    const finished = playerHp <= 0 || enemyHp <= 0 || round >= DECK_SIZE;
+    if(finished){
+      nextRoundBtn.textContent = "RESULT";
+      nextRoundBtn.hidden = false;
+      roundMessage.textContent = "接続は終了しました。対戦結果を確認できます";
+    }else{
+      roundLocked = true;
+      nextRoundBtn.hidden = true;
+      roundMessage.textContent = "対戦相手との接続が切れました";
+    }
+  }else{
+    setOnlineStatus("対戦相手との接続が切れました","error");
+  }
+}
+
+function handleOnlineError(error){
+  const message = error && error.type === "peer-unavailable"
+    ? "ルームが見つかりません。コードを確認してください"
+    : "通信を開始できませんでした。もう一度お試しください";
+  setOnlineStatus(message,"error");
+}
+
+function cleanupOnlineConnection(){
+  const connection = onlineConnection;
+  const peer = onlinePeer;
+  onlineConnection = null;
+  onlinePeer = null;
+  localDeckSent = false;
+  remoteDeckIds = null;
+  pendingLocalCard = null;
+  pendingRemotePick = null;
+  onlineDisconnected = false;
+  onlineBattleStarted = false;
+  if(connection){
+    connection.__intentionalClose = true;
+    connection.close();
+  }
+  if(peer && !peer.destroyed) peer.destroy();
+}
+
 function finishBattle(){
   const title = document.getElementById("resultTitle");
   const detail = document.getElementById("resultDetail");
@@ -251,22 +476,31 @@ function finishBattle(){
     showVictoryEffect("player");
     window.GameAudio?.sfx("win");
     title.textContent = "YOU WIN";
-    detail.textContent = "相手が使ったカードから1枚獲得できます";
-    enemyUsed.forEach(card => {
-      const button = document.createElement("button");
-      button.className = "rewardCard";
-      button.innerHTML = `<img src="${card.image}" alt="獲得候補 STAGE ${card.stage}">`;
-      button.addEventListener("click",() => claimReward(card));
-      rewardChoices.appendChild(button);
-    });
+    if(battleMode === "online"){
+      detail.textContent = "ONLINE BATTLE WIN / カードの移動はありません";
+      resultActions.hidden = false;
+    }else{
+      detail.textContent = "相手が使ったカードから1枚獲得できます";
+      enemyUsed.forEach(card => {
+        const button = document.createElement("button");
+        button.className = "rewardCard";
+        button.innerHTML = `<img src="${card.image}" alt="獲得候補 STAGE ${card.stage}">`;
+        button.addEventListener("click",() => claimReward(card));
+        rewardChoices.appendChild(button);
+      });
+    }
   }else if(enemyHp > playerHp){
     showVictoryEffect("rival");
     window.GameAudio?.sfx("lose");
-    const lost = playerUsed[Math.floor(Math.random()*playerUsed.length)];
-    removeOneCard(lost.id);
     title.textContent = "YOU LOSE";
-    detail.textContent = "相手にカードを1枚奪われました";
-    rewardChoices.innerHTML = `<div class="rewardCard"><img src="${lost.image}" alt="失った STAGE ${lost.stage} card"></div>`;
+    if(battleMode === "online"){
+      detail.textContent = "ONLINE BATTLE LOSE / カードの移動はありません";
+    }else{
+      const lost = playerUsed[Math.floor(Math.random()*playerUsed.length)];
+      removeOneCard(lost.id);
+      detail.textContent = "相手にカードを1枚奪われました";
+      rewardChoices.innerHTML = `<div class="rewardCard"><img src="${lost.image}" alt="失った STAGE ${lost.stage} card"></div>`;
+    }
     resultActions.hidden = false;
   }else{
     window.GameAudio?.sfx("select");
@@ -321,9 +555,16 @@ function removeOneCard(id){
 }
 
 document.getElementById("deckBackBtn").addEventListener("click",() => location.href="./index.html#cardbattle");
-document.getElementById("titleBtn").addEventListener("click",() => location.href="./index.html#cardbattle");
-document.getElementById("rematchBtn").addEventListener("click",() => {inventory=loadInventory();renderDeck();showScreen(deckScreen);window.GameAudio?.setScene("cardSelect");});
+document.getElementById("titleBtn").addEventListener("click",() => {cleanupOnlineConnection();location.href="./index.html#cardbattle";});
+document.getElementById("rematchBtn").addEventListener("click",() => {cleanupOnlineConnection();inventory=loadInventory();renderDeck();showScreen(deckScreen);window.GameAudio?.setScene("cardSelect");});
+document.getElementById("onlineLobbyClose").addEventListener("click",()=>{cleanupOnlineConnection();showScreen(deckScreen);});
+document.getElementById("createRoomBtn").addEventListener("click",createOnlineRoom);
+document.getElementById("joinRoomBtn").addEventListener("click",joinOnlineRoom);
+roomCodeInput.addEventListener("input",()=>{roomCodeInput.value=roomCodeInput.value.toUpperCase().replace(/[^A-Z2-9]/g,"");});
+roomCodeInput.addEventListener("keydown",event=>{if(event.key === "Enter")joinOnlineRoom();});
 battleStartBtn.addEventListener("click",startBattle);
+onlineBattleBtn.addEventListener("click",openOnlineLobby);
 nextRoundBtn.addEventListener("click",advanceRound);
+window.addEventListener("beforeunload",cleanupOnlineConnection);
 
 renderDeck();

@@ -15,7 +15,28 @@
     </header>
     <div id="emptyDeck" hidden>カードケースにカードがありません。IMAGE INVADERSでカードを獲得してください。</div>
     <div id="deckGrid" class="cardGrid"></div>
-    <footer class="deckFooter"><button id="battleStartBtn" class="commandBtn" disabled>BATTLE START</button></footer>
+    <footer class="deckFooter">
+      <button id="battleStartBtn" class="commandBtn" disabled>CPU BATTLE</button>
+      <button id="onlineBattleBtn" class="commandBtn secondary" disabled>ONLINE BATTLE</button>
+    </footer>
+  </section>
+
+  <section id="onlineLobby" class="screen onlineLobby" hidden>
+    <div class="lobbyPanel">
+      <button id="onlineLobbyClose" class="iconBtn lobbyClose" type="button" aria-label="デッキ選択へ戻る">&#x2039;</button>
+      <p class="resultLabel">FRIEND MATCH</p>
+      <h2>ONLINE BATTLE</h2>
+      <p class="lobbyLead">同じ8文字のルームコードで接続します</p>
+      <div class="lobbyActions">
+        <button id="createRoomBtn" class="commandBtn" type="button">CREATE ROOM</button>
+        <div class="joinRoom">
+          <input id="roomCodeInput" type="text" maxlength="8" inputmode="text" autocomplete="off" placeholder="ROOM CODE" aria-label="ルームコード">
+          <button id="joinRoomBtn" class="commandBtn secondary" type="button">JOIN ROOM</button>
+        </div>
+      </div>
+      <div id="roomCodeDisplay" hidden><span>ROOM CODE</span><strong id="roomCodeText"></strong></div>
+      <p id="onlineStatus" class="onlineStatus" aria-live="polite">ルームを作成するか、コードを入力してください</p>
+    </div>
   </section>
 
   <section id="gameScreen" class="screen" hidden>
@@ -49,6 +70,7 @@
     </div>
   </section>
 </main>
+<script src="peerjs.min.js"></script>
 <script src="audio.js"></script>
 <script src="cardbattle.js"></script>
 </body>
