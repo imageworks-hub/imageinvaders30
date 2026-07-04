@@ -1,4 +1,4 @@
-# App Review notes draft
+# imagegames App Review notes draft
 
 Image Invaders contains two connected game modes: a stage-based shooter and a card battle game.
 
@@ -14,7 +14,7 @@ Stage 5 is a perspective 3D shooting stage. Drag vertically to move closer to or
 
 ## In-App Purchase
 
-- Product ID: com.imageworkshub.imageinvaders.barrier3
+- Product ID: com.imageworkshub.imagegames.barrier3
 - Type: Consumable
 - Content: Three barriers that each block one enemy hit
 - Entry point: ITEM SHOP icon on the upper-right side of the Image Invaders title screen

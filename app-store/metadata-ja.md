@@ -1,11 +1,11 @@
-# Image Invaders - App Store metadata draft
+# imagegames - App Store metadata draft
 
 ## App record
 
-- Name: Image Invaders
+- Name: imagegames
 - Primary language: Japanese
-- Bundle ID: com.imageworkshub.imageinvaders
-- SKU: imageinvaders-ios-001
+- Bundle ID: com.imageworkshub.imagegames
+- SKU: imagegames-ios-001
 - Platform: iOS
 - Version: 1.0
 - Primary category: Games / Action

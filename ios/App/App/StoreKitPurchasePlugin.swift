@@ -13,7 +13,7 @@ public class StoreKitPurchasePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "finishPurchase", returnType: CAPPluginReturnPromise)
     ]
 
-    private let barrierProductID = "com.imageworkshub.imageinvaders.barrier3"
+    private let barrierProductID = "com.imageworkshub.imagegames.barrier3"
     private let barrierQuantity = 3
 
     @objc public func getBarrierProduct(_ call: CAPPluginCall) {

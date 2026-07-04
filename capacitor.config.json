@@ -1,6 +1,6 @@
 {
-  "appId": "com.imageworkshub.imageinvaders",
-  "appName": "Image Invaders",
+  "appId": "com.imageworkshub.imagegames",
+  "appName": "imagegames",
   "webDir": "dist",
   "ios": {
     "backgroundColor": "#020514",
