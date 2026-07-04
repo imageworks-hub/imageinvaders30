@@ -1,0 +1,10 @@
+{
+  "appId": "com.imageworkshub.imageinvaders",
+  "appName": "Image Invaders",
+  "webDir": "dist",
+  "ios": {
+    "backgroundColor": "#020514",
+    "contentInset": "always",
+    "preferredContentMode": "mobile"
+  }
+}
