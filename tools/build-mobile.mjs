@@ -33,6 +33,20 @@ stage5 = stage5.replace(
 );
 await writeFile(path.join(dist, "stage5.js"), stage5, "utf8");
 
+const scriptPath = path.join(dist, "script.js");
+let scriptBuffer = await readFile(scriptPath);
+scriptBuffer = replaceAscii(
+  scriptBuffer,
+  'fetch("https://api.countapi.xyz/hit/imageinvaders30/title")',
+  'Promise.reject(new Error("Native counter disabled"))'
+);
+scriptBuffer = replaceAscii(
+  scriptBuffer,
+  'https://buy.stripe.com/test_7sY6oA3Gh6SK3pA1IwbII00',
+  'about:blank'
+);
+await writeFile(scriptPath, scriptBuffer);
+
 await copyFile(
   path.join(root, "mobile-runtime.js"),
   path.join(dist, "mobile-runtime.js")
@@ -49,3 +63,19 @@ await cp(
 );
 
 console.log("iOS web bundle created in dist/");
+
+function replaceAscii(buffer,search,replacement){
+  const searchBytes = Buffer.from(search,"ascii");
+  const replacementBytes = Buffer.from(replacement,"ascii");
+  const index = buffer.indexOf(searchBytes);
+
+  if(index < 0){
+    throw new Error(`Mobile build token not found: ${search}`);
+  }
+
+  return Buffer.concat([
+    buffer.subarray(0,index),
+    replacementBytes,
+    buffer.subarray(index + searchBytes.length)
+  ]);
+}
