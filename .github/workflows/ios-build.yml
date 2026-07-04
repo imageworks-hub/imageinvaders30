@@ -64,7 +64,7 @@ jobs:
           build
 
       - name: Import distribution certificate and profile
-        if: ${{ inputs.upload_to_testflight }}
+        if: ${{ inputs.upload_to_testflight || contains(github.event.head_commit.message, '[testflight]') }}
         env:
           CERTIFICATE_BASE64: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_BASE64 }}
           CERTIFICATE_PASSWORD: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_PASSWORD }}
@@ -89,7 +89,7 @@ jobs:
           cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/image-invaders.mobileprovision"
 
       - name: Archive signed app
-        if: ${{ inputs.upload_to_testflight }}
+        if: ${{ inputs.upload_to_testflight || contains(github.event.head_commit.message, '[testflight]') }}
         env:
           DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
           PROFILE_NAME: ${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}
@@ -105,7 +105,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="$PROFILE_NAME"
 
       - name: Export IPA
-        if: ${{ inputs.upload_to_testflight }}
+        if: ${{ inputs.upload_to_testflight || contains(github.event.head_commit.message, '[testflight]') }}
         env:
           DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
           PROFILE_NAME: ${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}
@@ -138,7 +138,7 @@ jobs:
             -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist"
 
       - name: Validate and upload to TestFlight
-        if: ${{ inputs.upload_to_testflight }}
+        if: ${{ inputs.upload_to_testflight || contains(github.event.head_commit.message, '[testflight]') }}
         env:
           API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
