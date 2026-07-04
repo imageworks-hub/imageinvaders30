@@ -2691,6 +2691,23 @@ ctx.fillText(
     40
 );
 
+if(barrierCount > 0){
+
+    ctx.fillStyle = "#8eeaff";
+    ctx.font = "bold 14px monospace";
+    ctx.shadowColor = "cyan";
+    ctx.shadowBlur = 8;
+
+    ctx.fillText(
+        "BARRIER " + barrierCount,
+        canvas.width - 20,
+        68
+    );
+
+    ctx.shadowBlur = 0;
+
+}
+
 ctx.textAlign = "left";
     
 
