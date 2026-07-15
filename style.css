@@ -1739,7 +1739,8 @@ body.stage5-active{
 #titleSwipeHint{
     position:absolute;
     left:50%;
-    bottom:52px;
+    top:max(72px,calc(env(safe-area-inset-top) + 58px));
+    bottom:auto;
     z-index:1201;
     display:flex;
     align-items:center;
@@ -1935,7 +1936,12 @@ body.stage5-active{
 }
 
 @media (max-width:768px){
-    #titleSwipeHint{ bottom:52px; height:34px; font-size:13px; }
+    #titleSwipeHint{
+        top:max(58px,calc(env(safe-area-inset-top) + 46px));
+        bottom:auto;
+        height:34px;
+        font-size:13px;
+    }
     .titleSwipeArrow{ font-size:24px; }
     #title2StartBtn{ top:78%; width:220px; height:62px; font-size:26px; }
     #title2CardCaseBtn{ left:12px; bottom:max(72px,calc(env(safe-area-inset-bottom) + 50px)); width:58px; height:58px; }
