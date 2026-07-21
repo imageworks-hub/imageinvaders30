@@ -23,10 +23,19 @@
         typeof capacitor.isNativePlatform === "function" &&
         capacitor.isNativePlatform()
     );
+    const platform = capacitor && typeof capacitor.getPlatform === "function"
+        ? capacitor.getPlatform()
+        : "";
     const store = capacitor && capacitor.Plugins
-        ? capacitor.Plugins.StoreKitPurchase
+        ? (
+            platform === "android"
+                ? capacitor.Plugins.GooglePlayPurchase
+                : capacitor.Plugins.StoreKitPurchase
+        )
         : null;
-    const processedTransactionsKey = "processedStoreKitTransactions";
+    const processedTransactionsKey = platform === "android"
+        ? "processedGooglePlayPurchases"
+        : "processedStoreKitTransactions";
 
     if(accessCounter){
         accessCounter.style.display = "none";
@@ -40,14 +49,14 @@
             shopScreen.style.display = "none";
         }
     }else{
-        configureStoreKit();
+        configureNativeStore();
     }
 
     document.addEventListener("contextmenu",function(event){
         event.preventDefault();
     });
 
-    async function configureStoreKit(){
+    async function configureNativeStore(){
         try{
             const product = await store.getBarrierProduct();
             const label = shopScreen ? shopScreen.querySelector("label") : null;
