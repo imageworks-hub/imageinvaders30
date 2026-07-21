@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">imagegames</string>
+    <string name="title_activity_main">imagegames</string>
+    <string name="package_name">com.imageworkshub.imagegames</string>
+    <string name="custom_url_scheme">com.imageworkshub.imagegames</string>
+</resources>
